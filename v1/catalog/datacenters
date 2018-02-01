@@ -1,0 +1,9 @@
+[
+  ${
+    range(10).map(
+        function(item, i) {
+            return `"${fake.address.countryCode().toLowerCase()}-${ i % 2 ? "west" : "east"}"`;
+        }
+    )
+  }
+]

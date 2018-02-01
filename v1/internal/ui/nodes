@@ -1,0 +1,60 @@
+[
+  ${
+    range(10000).map(
+      function(item, i)
+      {
+        return `
+          {
+            "ID":"${fake.random.uuid()}",
+            "Node":"node-${i}",
+            "Address":"${fake.internet.ip()}",
+            "TaggedAddresses":{
+              "lan":"${fake.internet.ip()}",
+              "wan":"${fake.internet.ip()}"
+            },
+            "Meta": {
+              "consul-network-segment":""
+            },
+            "Services":[
+            ${
+              range(fake.random.number(4) + 1).map(
+                function(item, i) {
+                  const service = `service-${i}`;
+                  return `
+                    {
+                      "ID":"${service}",
+                      "Service":"${service}",
+                      "Tags":null,
+                      "Address":"",
+                      "Port":8300,
+                      "EnableTagOverride":false,
+                      "CreateIndex":5,
+                      "ModifyIndex":5
+                    }
+                  `;
+                }
+              )
+            }
+            ],
+            "Checks":[
+              {
+                "Node":"node-${i}",
+                "CheckID":"serfHealth",
+                "Name":"Serf Health Status",
+                "Status":"passing",
+                "Notes":"",
+                "Output":"Agent alive and reachable",
+                "ServiceID":"",
+                "ServiceName":"",
+                "ServiceTags":[],
+                "Definition":{},
+                "CreateIndex":5,
+                "ModifyIndex":5
+              }
+            ]
+          }
+        `;
+      }
+    )
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "ID":"${node = location.segment(4)}",
+  "Node":"${node}",
+  "Address":"${ip = fake.internet.ip()}",
+  "TaggedAddresses":{"lan":"${ip}","wan":"${ip}"},
+  "Meta":{
+    "consul-network-segment":""
+  },
+  "Services":[
+    ${
+      range(fake.random.number(10) + 1).map(
+        function(item, i)
+        {
+          const service = `service-${i}`;
+          return `
+            {
+              "ID":"${service}",
+              "Service":"${service}",
+              "Tags":null,
+              "Address":"",
+              "Port":6379,
+              "EnableTagOverride":false,
+              "CreateIndex":11,
+              "ModifyIndex":11
+            }
+          `;
+        }
+      )
+    }
+  ],
+  "Checks":[
+    ${
+      range(2).map(
+        function(item, i)
+        {
+          return `
+            {
+              "Node":"${location.segment(4)}",
+              "CheckID":"Disk Util",
+              "Name":"Disk Util",
+              "Status":"passing",
+              "Notes":"Critical 5%, warning 10% free",
+              "Output":"DISK OK - free space: / 17364 MB (90% inode=93%);| /=1806MB;18013;19014;0;20015",
+              "ServiceID":"",
+              "ServiceName":"",
+              "ServiceTags":null,
+              "Definition":{},
+              "CreateIndex":12,
+              "ModifyIndex":230113
+            }
+          `;
+        }
+      )
+    }
+   ]
+}
