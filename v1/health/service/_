@@ -4,7 +4,7 @@
       function(item, i)
       {
         const node = `node-${i}`;
-        const service = location.segment(3);
+        const service = location.pathname.get(3);
         const ip = fake.internet.ip();
         return `
         {

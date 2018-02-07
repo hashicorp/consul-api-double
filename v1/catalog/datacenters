@@ -1,6 +1,6 @@
 [
   ${
-    range(10).map(
+    range(env('CONSUL_DATACENTER_COUNT', 10)).map(
         function(item, i) {
             return `"${fake.address.countryCode().toLowerCase()}-${ i % 2 ? "west" : "east"}-${i}"`;
         }

@@ -21,7 +21,7 @@
       "ChecksCritical":${fake.random.number(100)}
   },
   ${
-    range(100).map(
+    range(env('CONSUL_SERVICE_COUNT', 100)).map(
       function(item, i)
       {
         return `

@@ -62,28 +62,28 @@ Object containing access to various [`faker` functions](https://github.com/marak
 ]
 ```
 
-### location.href
+### location.pathname
 
 Reference to the current url
 
 ```javascript
 // /v1/catalog/datacenters
 [
-    "${location.href}"
+    "${location.pathname}"
 ]
 // yields
 [
     "/v1/catalog/datacenters"
 ]
 ```
-### location.segment(int)
+### location.pathname.get(int)
 
 Reference a 'segment' in the current url
 
 ```javascript
 // /v1/catalog/datacenters
 [
-    "${location.segment(1)}"
+    "${location.pathname.get(1)}"
 ]
 // yields
 [

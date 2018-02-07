@@ -1,5 +1,5 @@
 {
-  "ID":"${node = location.segment(4)}",
+  "ID":"${node = location.pathname.get(4)}",
   "Node":"${node}",
   "Address":"${ip = fake.internet.ip()}",
   "TaggedAddresses":{"lan":"${ip}","wan":"${ip}"},
@@ -35,7 +35,7 @@
         {
           return `
             {
-              "Node":"${location.segment(4)}",
+              "Node":"${location.pathname.get(4)}",
               "CheckID":"Disk Util",
               "Name":"Disk Util",
               "Status":"passing",
