@@ -1,6 +1,6 @@
 [
   ${
-    range(10000).map(
+    range(100).map(
       function(item, i)
       {
         return `
