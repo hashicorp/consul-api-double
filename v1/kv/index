@@ -2,16 +2,17 @@
   ${
     range(env('CONSUL_KV_COUNT', 100)).map(
         function(item, i) {
-            return range(
-              fake.random.number(
-                  {max: env('CONSUL_KV_MAX_DEPTH', 10)}
-              )
-            ).reduce(
-                function(prev, item, i, arr) {
-                    return `${prev}/${fake.lorem.word()}-${i}`
-                },
-                `"${fake.lorem.word()}-${i}"`
-            );
+            return `"${
+                range(
+                    fake.random.number(
+                        {max: env('CONSUL_KV_MAX_DEPTH', 10)}
+                    )
+                ).reduce(
+                    function(prev, item, i, arr) {
+                        return `${prev}/${fake.lorem.word()}-${i}`
+                    },
+                    `${fake.lorem.word()}-${i}`
+                )}"`;
         }
     )
   }
