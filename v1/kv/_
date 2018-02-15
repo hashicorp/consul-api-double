@@ -4,15 +4,7 @@ ${
     {
         "LockIndex":0,
         "Key":"${
-            // location.segment(2, 0)
-            location.href.split("/").reduce(
-                function(prev, item, i, arr) {
-                    if(i > 2) {
-                        return `${prev}${item}${arr.length -1 == i ? "" : "/"}`;
-                    }
-                    return prev;
-                }
-            )
+            location.pathname.slice(3)
         }",
         "Flags":0,
         "Value":"VHVlIEZlYiAgNiAxMzoxOToyMiBVVEMgMjAxOA==",
