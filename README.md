@@ -2,7 +2,7 @@
 
 Super simple api 'double' for easily visualizing the Consul api via the filesystem.
 
-This is served by a super simple express server/docker container (yet to come) 
+This is served by a super simple express server/docker container (yet to come)
 
 'Templates' use simple native javascript template literals for very basic looping and basic logic for providing fake data.
 

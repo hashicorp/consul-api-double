@@ -1,24 +1,24 @@
 [
   {
     "Name":"all-passing",
-      "Nodes":["dc48921ff9cc"],
-      "ChecksPassing":${fake.random.number(100)},
-      "ChecksWarning":0,
-      "ChecksCritical":0
+    "Nodes":["dc48921ff9cc"],
+    "ChecksPassing":${fake.random.number(100)},
+    "ChecksWarning":0,
+    "ChecksCritical":0
   },
   {
     "Name":"all-warning",
-      "Nodes":["dc48921ff9cc"],
-      "ChecksPassing":0,
-      "ChecksWarning":${fake.random.number(100)},
-      "ChecksCritical":0
+    "Nodes":["dc48921ff9cc"],
+    "ChecksPassing":0,
+    "ChecksWarning":${fake.random.number(100)},
+    "ChecksCritical":0
   },
   {
     "Name":"all-critical",
-      "Nodes":["dc48921ff9cc"],
-      "ChecksPassing":0,
-      "ChecksWarning":0,
-      "ChecksCritical":${fake.random.number(100)}
+    "Nodes":["dc48921ff9cc"],
+    "ChecksPassing":0,
+    "ChecksWarning":0,
+    "ChecksCritical":${fake.random.number(100)}
   },
   ${
     range(env('CONSUL_SERVICE_COUNT', 100)).map(
