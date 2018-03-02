@@ -21,7 +21,7 @@
           "Service":{
             "ID":"${service}",
             "Service":"${service}",
-            "Tags":[],
+            "Tags":["Tag", "Another Tag"],
             "Address":"",
             "Port":${fake.random.number({min: 1, max: 6553})},
             "EnableTagOverride":false,
@@ -42,7 +42,7 @@
                   "Output":"Agent alive and reachable",
                   "ServiceID":"",
                   "ServiceName":"",
-                  "ServiceTags":[],
+                  "ServiceTags":["Tag"],
                   "Definition":{},
                   "CreateIndex":5,
                   "ModifyIndex":5
