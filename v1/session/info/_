@@ -1,0 +1,13 @@
+[
+    {
+        "ID":"${location.pathname.get(4)}",
+        "Name":"${fake.hacker.noun()}",
+        "Node":"node-1",
+        "Checks":["serfHealth"],
+        "LockDelay":15000000000,
+        "Behavior":"release",
+        "TTL":"",
+        "CreateIndex":2782,
+        "ModifyIndex":2782
+    }
+]

@@ -1,1 +1,21 @@
-[]
+[
+  ${
+    range(env('CONSUL_SESSION_COUNT', 10)).map(
+        function(item, i) {
+            // behavior = release/delete
+            // TTL = "" | 10:84600
+            return `{
+                "ID":"${fake.random.uuid()}",
+                "Name":"${fake.hacker.noun()}",
+                "Node":"${location.pathname.get(4)}",
+                "Checks":["serfHealth"],
+                "LockDelay":15000000000,
+                "Behavior":"release",
+                "TTL":"",
+                "CreateIndex":2782,
+                "ModifyIndex":2782
+            }`;
+        }
+    )
+  }
+]
