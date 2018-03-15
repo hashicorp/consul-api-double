@@ -5,7 +5,7 @@
         "Node":"node-1",
         "Checks":["serfHealth"],
         "LockDelay":15000000000,
-        "Behavior":"release",
+        "Behavior":"${fake.helpers.randomize(['release', 'delete'])}",
         "TTL":"",
         "CreateIndex":2782,
         "ModifyIndex":2782

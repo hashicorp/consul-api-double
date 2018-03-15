@@ -1,1 +1,22 @@
-ACL support disabled
+${
+    env('CONSUL_ENABLE_ACLS', 100) ? `
+[
+    {
+        "ID":"anonymous",
+        "Name":"Anonymous Token",
+        "Type":"client",
+        "Rules":"",
+        "CreateIndex":4,
+        "ModifyIndex":4
+    },
+    {
+        "ID":"secret",
+        "Name":"Master Token",
+        "Type":"management",
+        "Rules":"",
+        "CreateIndex":5,
+        "ModifyIndex":5
+    }
+]
+` : "ACL support disabled"
+}
