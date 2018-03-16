@@ -6,7 +6,7 @@
             return `{
                 "ID":"${fake.random.uuid()}",
                 "Name":"${fake.hacker.noun()}",
-                "Node":"${location.pathname.get(4)}",
+                "Node":"${location.pathname.get(3)}",
                 "Checks":["serfHealth"],
                 "LockDelay":15000000000,
                 "Behavior":"${fake.helpers.randomize(['release', 'delete'])}",
