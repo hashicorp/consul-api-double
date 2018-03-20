@@ -1,6 +1,6 @@
 [
     {
-        "ID":"${location.pathname.get(4)}",
+        "ID":"${location.pathname.get(3)}",
         "Name":"${fake.hacker.noun()}",
         "Node":"node-1",
         "Checks":["serfHealth"],
