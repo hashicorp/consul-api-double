@@ -1,11 +1,11 @@
 [
   ${
-    range(env('CONSUL_KV_COUNT', 100)).map(
+    range(env('CONSUL_KV_COUNT', 1)).map(
         function(item, i) {
             return `"${
                 range(
                     fake.random.number(
-                        {max: env('CONSUL_KV_MAX_DEPTH', 10)}
+                        {max: env('CONSUL_KV_MAX_DEPTH', 1)}
                     )
                 ).reduce(
                     function(prev, item, i, arr) {

@@ -1,6 +1,6 @@
 [
   ${
-    range(10).map(
+    range(env('CONSUL_NODE_COUNT', 100)).map(
       function(item, i)
       {
         const node = `node-${i}`;
@@ -30,16 +30,16 @@
           },
           "Checks":[
           ${
-            range(fake.random.number(1) + 1).map(
-              function(item, i) {
+            range(env('CONSUL_CHECK_COUNT', 3)).map(
+              function(item) {
                 return `
                 {
                   "Node":"${node}",
-                  "CheckID":"serfHealth",
-                  "Name":"Serf Health Status",
-                  "Status":"passing",
-                  "Notes":"",
-                  "Output":"Agent alive and reachable",
+                  "CheckID":"${fake.hacker.noun()}Health",
+                  "Name":"${fake.hacker.noun()} Status",
+                  "Status":"${i > 7 ? "passing" : fake.helpers.randomize(['warning', 'critical'])}",
+                  "Notes":"Notes in here",
+                  "Output":"${i > 7 ? "happy" : fake.helpers.randomize(['not in a good way', 'not happy'])}",
                   "ServiceID":"",
                   "ServiceName":"",
                   "ServiceTags":["Tag"],
