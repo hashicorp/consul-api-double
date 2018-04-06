@@ -1,5 +1,5 @@
 ${
-    env('CONSUL_ENABLE_ACLS', 100) ? `
+    env('CONSUL_ENABLE_ACLS', 1) ? `
 [
     {
         "ID":"anonymous",
