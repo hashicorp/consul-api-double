@@ -38,17 +38,18 @@
             ],
             "Checks":[
             ${
-                range(env('CONSUL_CHECK_COUNT', 3)).map(
-                    function()
+                range(env('CONSUL_CHECK_COUNT', fake.random.number(9) + 1)).map(
+                    function(item, j)
                     {
+                        const passing = i > 7 || j > fake.random.number(4);
                         return `
                             {
                                 "Node":"node-${i}",
                                 "CheckID":"${fake.hacker.noun()}Health",
                                 "Name":"${fake.hacker.noun()} Status",
-                                "Status":"${i > 7 ? "passing" : fake.helpers.randomize(['warning', 'critical'])}",
+                                "Status":"${ passing ? "passing" : fake.helpers.randomize(['warning', 'critical'])}",
                                 "Notes":"Notes in here",
-                                "Output":"${i > 7 ? "happy" : fake.helpers.randomize(['not in a good way', 'not happy'])}",
+                                "Output":"${ passing ? "happy" : fake.helpers.randomize(['not in a good way', 'not happy'])}",
                                 "ServiceID":"",
                                 "ServiceName":"",
                                 "ServiceTags":["Tag"],
