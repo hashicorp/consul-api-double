@@ -1,25 +1,4 @@
 [
-  {
-    "Name":"all-passing",
-    "Nodes":["dc48921ff9cc"],
-    "ChecksPassing":${fake.random.number(100)},
-    "ChecksWarning":0,
-    "ChecksCritical":0
-  },
-  {
-    "Name":"all-warning",
-    "Nodes":["dc48921ff9cc"],
-    "ChecksPassing":0,
-    "ChecksWarning":${fake.random.number(100)},
-    "ChecksCritical":0
-  },
-  {
-    "Name":"all-critical",
-    "Nodes":["dc48921ff9cc"],
-    "ChecksPassing":0,
-    "ChecksWarning":0,
-    "ChecksCritical":${fake.random.number(100)}
-  },
   ${
     range(env('CONSUL_SERVICE_COUNT', 1 + (location.search.index || 0))).map(
       function(item, i)
@@ -27,6 +6,16 @@
         return `
           {
             "Name":"service-${i}",
+            "Tags": [
+                ${
+                    range(env('CONSUL_TAG_COUNT', fake.random.number(10))).map(
+                        function(item, i)
+                        {
+                            return `"${fake.hacker.noun()}"`;
+                        }
+                    )
+                }
+            ],
             "Nodes":[
               ${
                 range(100).map(
