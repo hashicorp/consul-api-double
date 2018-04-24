@@ -16,7 +16,21 @@ ${
         "Rules":"",
         "CreateIndex":5,
         "ModifyIndex":5
-    }
+    }${env('CONSUL_ACL_COUNT') > 2 ? "," : ""}
+  ${
+    range(Math.max(0, env('CONSUL_ACL_COUNT', 0) - 2)).map(
+        function(item, i) {
+            return `{
+                "ID":"${fake.lorem.word()}-${i}",
+                "Name":"${fake.lorem.word()}-${i}",
+                "Type":"client",
+                "Rules":"",
+                "CreateIndex":5,
+                "ModifyIndex":5
+            }`;
+        }
+    )
+  }
 ]
 ` : "ACL support disabled"
 }

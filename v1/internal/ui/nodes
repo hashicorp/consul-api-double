@@ -16,25 +16,34 @@
               "consul-network-segment":""
             },
             "Services":[
-            ${
-              range(fake.random.number(4) + 1).map(
-                function(item, i) {
-                  const service = `service-${i}`;
-                  return `
-                    {
-                      "ID":"${service}",
-                      "Service":"${service}",
-                      "Tags":null,
-                      "Address":"",
-                      "Port":8300,
-                      "EnableTagOverride":false,
-                      "CreateIndex":5,
-                      "ModifyIndex":5
-                    }
-                  `;
+                ${
+                    range(fake.random.number(4) + 1).map(
+                        function(item, i) {
+                        const service = `service-${i}`;
+                        return `
+                            {
+                                "ID":"${service}",
+                                "Service":"${service}",
+                                "Tags":[
+                                    ${
+                                        range(env('CONSUL_TAG_COUNT', fake.random.number(10))).map(
+                                            function(item, i)
+                                            {
+                                                return `"${fake.hacker.noun()}"`;
+                                            }
+                                        )
+                                    }
+                                ],
+                                "Address":"",
+                                "Port":8300,
+                                "EnableTagOverride":false,
+                                "CreateIndex":5,
+                                "ModifyIndex":5
+                            }
+                        `;
+                        }
+                    )
                 }
-              )
-            }
             ],
             "Checks":[
             ${

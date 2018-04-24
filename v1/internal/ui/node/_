@@ -16,7 +16,16 @@
             {
               "ID":"${service}",
               "Service":"${service}",
-              "Tags":null,
+              "Tags":[
+                ${
+                  range(env('CONSUL_TAG_COUNT', fake.random.number(10))).map(
+                    function(item, i)
+                    {
+                      return `"${fake.hacker.noun()}"`;
+                    }
+                  )
+                }
+              ],
               "Address":"",
               "Port":6379,
               "EnableTagOverride":false,
@@ -30,7 +39,7 @@
   ],
   "Checks":[
     ${
-      range(2).map(
+      range(env('CONSUL_CHECK_COUNT', 3)).map(
         function(item, i)
         {
           return `

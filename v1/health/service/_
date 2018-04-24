@@ -30,7 +30,7 @@
           },
           "Checks":[
           ${
-            range(env('CONSUL_CHECK_COUNT', 10)).map(
+            range(env('CONSUL_CHECK_COUNT', 3)).map(
               function(item, j) {
                 const passing = i > 7 || j > fake.random.number(4);
                 return `
