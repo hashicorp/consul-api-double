@@ -5,7 +5,7 @@
       {
         return `
           {
-            "Name":"service-${i}",
+            "Name":"service-${i}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}",
             "Tags": [
                 ${
                     range(env('CONSUL_TAG_COUNT', fake.random.number(10))).map(
@@ -26,9 +26,9 @@
                 )
               }
             ],
-            "ChecksPassing":${fake.random.number(10)},
-            "ChecksWarning":${fake.random.number(10)},
-            "ChecksCritical":${fake.random.number(10)}
+            "ChecksPassing":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+            "ChecksWarning":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+            "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})}
           }
         `;
       }
