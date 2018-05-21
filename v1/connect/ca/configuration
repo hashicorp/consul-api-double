@@ -1,0 +1,9 @@
+{
+  "CAProvider": "Consul",
+  "Config": {
+    "PrivateKey": "/etc/ssl/root.key",
+    "RootCert": "/etc/ssl/root.crt",
+    "RotationPeriod": "30d"
+  }
+}
+

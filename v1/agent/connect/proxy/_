@@ -1,0 +1,18 @@
+{
+  "ProxyServiceID": "web-proxy",
+  "TargetServiceID": "web",
+  "ModifyIndex": 54,
+  "ProxyConfig": {
+  "BindAddress": "",
+  "LocalServiceAddress": "127.0.0.1",
+  "Command": "consul connect proxy",
+  "ExecMode": "daemon",
+  "Upstreams": [
+    {
+      "Destination": "db",
+      "Type": "service",
+      "LocalAddr": "127.0.0.1",
+      "LocalPort": 1234
+    }
+  ]
+}

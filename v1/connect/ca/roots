@@ -1,0 +1,14 @@
+{
+  "ActiveRootID": "8d49e740-8099-dcd4-be31-1656bdad68ed",
+  "Roots": [
+    {
+      "ID": "8d49e740-8099-dcd4-be31-1656bdad68ed",
+      "Name": "Consul CA 1",
+      "RootCert": "cert contents (pem)",
+      "Active": true,
+      "CreateIndex": 6,
+      "ModifyIndex": 6
+    }
+  ]
+}
+

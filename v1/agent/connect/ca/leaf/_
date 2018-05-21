@@ -1,0 +1,11 @@
+{
+  "ModifyIndex": 123,
+  "Service": "web",
+  "ServiceURI": "spiffe://dc1-7e567ac2-551d-463f-8497-f78972856fc1.consul/ns/default/dc/dc1/svc/web",
+  "CertificatePEM": "... PEM bytes for the certificate and all intermediates",
+  "PrivateKeyPEM": "... PEM bytes for the private key",
+  "Serial": "04:00:00:00:00:01:15:4b:5a:c3:94",
+  "KeyID": "60:7B:66:1A:45:0D:97:CA:89:50:2F:7D:04:CD:34:A8:FF:FC:FD:4B",
+  "ValidAfter": "2018-04-23T18:25:43.511Z",
+  "ValidBefore": "2018-05-23T18:25:43.511Z",
+}
