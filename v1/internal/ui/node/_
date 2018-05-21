@@ -47,7 +47,7 @@
               "Node":"${location.pathname.get(4)}",
               "CheckID":"Disk Util",
               "Name":"Disk Util",
-              "Status":"passing",
+              "Status":"${fake.helpers.randomize(['passing', 'warning', 'critical'])}",
               "Notes":"Critical 5%, warning 10% free",
               "Output":"DISK OK - free space: / 17364 MB (90% inode=93%);| /=1806MB;18013;19014;0;20015",
               "ServiceID":"",

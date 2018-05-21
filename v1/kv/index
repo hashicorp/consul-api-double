@@ -5,7 +5,7 @@
             return `"${
                 range(
                     fake.random.number(
-                        {max: env('CONSUL_KV_MAX_DEPTH', 1)}
+                        {max: env('CONSUL_KV_MAX_DEPTH', 0)}
                     )
                 ).reduce(
                     function(prev, item, i, arr) {
