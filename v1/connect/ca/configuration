@@ -1,9 +1,10 @@
 {
-  "CAProvider": "Consul",
+  "Provider": "consul",
   "Config": {
-    "PrivateKey": "/etc/ssl/root.key",
-    "RootCert": "/etc/ssl/root.crt",
-    "RotationPeriod": "30d"
-  }
+    "PrivateKey": null,
+    "RootCert": null,
+    "RotationPeriod": 7776000000000000
+  },
+  "CreateIndex": 5,
+  "ModifyIndex": 5
 }
-

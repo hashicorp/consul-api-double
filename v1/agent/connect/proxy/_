@@ -1,18 +1,17 @@
 {
   "ProxyServiceID": "web-proxy",
   "TargetServiceID": "web",
-  "ModifyIndex": 54,
-  "ProxyConfig": {
-  "BindAddress": "",
-  "LocalServiceAddress": "127.0.0.1",
-  "Command": "consul connect proxy",
+  "TargetServiceName": "web",
+  "ContentHash": "cffa5f4635b134b9",
   "ExecMode": "daemon",
-  "Upstreams": [
-    {
-      "Destination": "db",
-      "Type": "service",
-      "LocalAddr": "127.0.0.1",
-      "LocalPort": 1234
-    }
-  ]
+  "Command": [
+    "/bin/consul",
+    "connect",
+    "proxy"
+  ],
+  "Config": {
+    "bind_address": "127.0.0.1",
+    "bind_port": 20199,
+    "local_service_address": "127.0.0.1:8181"
+  }
 }

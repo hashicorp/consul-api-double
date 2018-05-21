@@ -1,0 +1,26 @@
+[
+  {
+    "ID": "4ffed935-439c-695d-4f51-f4fc0b12a7a7",
+    "Node": "iMac.lan",
+    "Address": "127.0.0.1",
+    "Datacenter": "dc1",
+    "TaggedAddresses": {
+      "lan": "127.0.0.1",
+      "wan": "127.0.0.1"
+    },
+    "NodeMeta": {
+      "consul-network-segment": ""
+    },
+    "ServiceKind": "connect-proxy",
+    "ServiceID": "web-proxy",
+    "ServiceName": "web-proxy",
+    "ServiceTags": [],
+    "ServiceAddress": "",
+    "ServiceMeta": {},
+    "ServicePort": 20199,
+    "ServiceEnableTagOverride": false,
+    "ServiceProxyDestination": "web",
+    "CreateIndex": 11,
+    "ModifyIndex": 11
+  }
+]
