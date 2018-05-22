@@ -1,5 +1,5 @@
 {
-  "ID": "${fake.random.uuid()}",
+  "ID": "${ location.pathname.get(3) }",
   "Description": "${fake.lorem.sentence()}",
   "SourceNS": "default",
   "SourceName": "${fake.hacker.noun()}",
