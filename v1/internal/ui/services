@@ -1,11 +1,11 @@
 [
   ${
-    range(env('CONSUL_SERVICE_COUNT', 1 + (location.search.index || 0))).map(
+    range(env('CONSUL_SERVICE_COUNT', 3 + (location.search.index || 0))).map(
       function(item, i)
       {
         return `
           {
-            "Name":"service-${i}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}-${fake.hacker.noun()}",
+            "Name":"service-${i}",
             "Tags": [
                 ${
                     range(env('CONSUL_TAG_COUNT', fake.random.number(10))).map(
