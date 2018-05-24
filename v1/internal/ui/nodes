@@ -35,7 +35,7 @@
                                     }
                                 ],
                                 "Address":"",
-                                "Port":8300,
+                                "Port":${fake.random.number({min: 0, max: 65535})},
                                 "EnableTagOverride":false,
                                 "CreateIndex":5,
                                 "ModifyIndex":5
