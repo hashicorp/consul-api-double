@@ -1,5 +1,5 @@
 {
-  "name": "consul-api-double",
+  "name": "@hashicorp/consul-api-double",
   "version": "1.0.0",
   "description": ""
 }
