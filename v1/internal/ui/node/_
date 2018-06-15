@@ -27,7 +27,7 @@
                 }
               ],
               "Address":"",
-              "Port":6379,
+              "Port": ${ i === 0 ? '65535' : fake.random.number({min: 0, max: 65534})},
               "EnableTagOverride":false,
               "CreateIndex":11,
               "ModifyIndex":11

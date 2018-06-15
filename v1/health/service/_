@@ -23,7 +23,7 @@
             "Service":"${service}",
             "Tags":["Tag", "Another Tag"],
             "Address":"",
-            "Port":${fake.random.number({min: 1, max: 6553})},
+            "Port":${fake.random.number({min: 0, max: 65535})},
             "EnableTagOverride":false,
             "CreateIndex":5,
             "ModifyIndex":5
