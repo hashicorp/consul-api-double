@@ -16,6 +16,7 @@
                     )
                 }
             ],
+            "Kind": "${fake.helpers.randomize(['consul', 'connect-proxy'])}",
             "Nodes":[
               ${
                 range(100).map(
