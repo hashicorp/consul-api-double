@@ -1,6 +1,6 @@
 # consul-api-double
 
-Super simple api 'double' for easily visualizing the Consul api via the filesystem.
+Super simple API 'double' for easily visualizing the Consul API via the filesystem.
 
 This is served by a super simple express server/docker container (yet to come)
 
