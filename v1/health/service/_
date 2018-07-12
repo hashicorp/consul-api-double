@@ -19,7 +19,7 @@
             "ModifyIndex":6
           },
           "Service":{
-            "ID":"${service}",
+            "ID": "${ i === 0 ? 'service-0-with-id' : fake.helpers.randomize([service, service + '-ID'])}",
             "Service":"${service}",
             "Tags":["Tag", "Another Tag"],
             "Address":"",
