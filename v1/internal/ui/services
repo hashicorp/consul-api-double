@@ -28,7 +28,7 @@
             "Kind": "${fake.helpers.randomize(['consul', 'connect-proxy'])}",
             "Nodes":[
               ${
-                range(100).map(
+                range(env('CONSUL_NODE_COUNT', 100)).map(
                   function(item, i)
                   {
                     return `"node-${i}"`;
