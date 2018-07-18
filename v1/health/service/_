@@ -22,7 +22,7 @@
             "ID": "${ i === 0 ? 'service-0-with-id' : fake.helpers.randomize([service, service + '-ID'])}",
             "Service":"${service}",
             "Tags":["Tag", "Another Tag"],
-            "Address":"",
+            "Address":"${fake.internet.ip()}",
             "Port":${fake.random.number({min: 0, max: 65535})},
             "EnableTagOverride":false,
             "CreateIndex":5,
