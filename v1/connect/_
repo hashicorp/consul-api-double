@@ -15,7 +15,7 @@ ${
             "DestinationName": "${fake.hacker.noun()}",
             "SourceType": "${fake.helpers.randomize(['consul', 'externaluri'])}",
             "Action": "${fake.helpers.randomize(['allow', 'deny'])}",
-            "Precedence": "${i + 1}",
+            "Precedence": ${i + 1},
             "DefaultAddr": "",
             "DefaultPort": 0,
             "Meta": {},
