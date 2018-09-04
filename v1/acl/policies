@@ -1,0 +1,23 @@
+[
+  ${
+    range(
+      env(
+        'CONSUL_POLICY_COUNT',
+        100
+      )
+    ).map(
+      function(item, i) {
+        return `
+          {
+            "ID": "${fake.random.uuid()}",
+            "Name": "policy-${i}",
+            "Description": "${fake.lorem.sentence()}",
+            "Datacenters": ${fake.helpers.randomize(['null', '["dc-1", "dc-2"]'])},
+            "CreateIndex": 10,
+            "ModifyIndex": 10
+          }
+        `
+      }
+    )
+  }
+]

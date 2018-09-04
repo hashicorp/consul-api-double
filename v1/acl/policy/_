@@ -1,0 +1,8 @@
+{
+  "ID": "${location.pathname.get(3)}",
+  "Name": "${fake.hacker.noun()}",
+  "Description": "${fake.lorem.sentence()}",
+  "Datacenters": ${fake.helpers.randomize(['null', '["dc-1", "dc-2"]'])},
+  "Rules": "key \"foo\" { policy = \"write\" }"
+}
+
