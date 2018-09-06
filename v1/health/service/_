@@ -22,6 +22,11 @@
             "ID": "${ i === 0 ? 'service-0-with-id' : fake.helpers.randomize([service, service + '-ID'])}",
             "Service":"${service}",
             "Tags":["Tag", "Another Tag"],
+${ fake.random.number({min: 1, max: 10}) > 2 ? `
+            "Meta": {
+              "external-source": "${fake.helpers.randomize(['consul', 'nomad', 'terraform', 'kubernetes', ''])}"
+            },
+` : `` }
             "Address":"${fake.internet.ip()}",
             "Port":${fake.random.number({min: 0, max: 65535})},
             "EnableTagOverride":false,

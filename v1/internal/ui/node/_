@@ -26,6 +26,11 @@
                   )
                 }
               ],
+${ fake.random.number({min: 1, max: 10}) > 2 ? `
+            "Meta": {
+              "external-source": "${fake.helpers.randomize(['consul', 'nomad', 'terraform', 'kubernetes', ''])}"
+            },
+` : `` }
               "Address":"",
               "Port": ${ i === 0 ? '65535' : fake.random.number({min: 0, max: 65534})},
               "EnableTagOverride":false,
