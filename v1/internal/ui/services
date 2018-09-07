@@ -36,7 +36,21 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
                 range(env('CONSUL_NODE_COUNT', 100)).map(
                   function(item, i)
                   {
-                    return `"node-${i}"`;
+                    return `
+                      {
+                        "ID":"7037e928-d9e8-3b58-4712-6f5ded209002",
+                        "Node":"node-${$i}",
+                        "Services": [
+                          {
+                            "ID": "service-id",
+                            "Service":"service-name",
+                            "Meta": {
+                              "external-source": "${fake.helpers.randomize(['consul', 'nomad', 'terraform', 'kubernetes', ''])}"
+                            }
+                          }
+                        ]
+                      }
+                    `;
                   }
                 )
               }
