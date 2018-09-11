@@ -27,9 +27,17 @@
             ],
             "Kind": "${fake.helpers.randomize(['consul', 'connect-proxy'])}",
 ${ fake.random.number({min: 1, max: 10}) > 2 ? `
-            "Meta": {
-              "external-source": "${fake.helpers.randomize(['consul', 'nomad', 'terraform', 'kubernetes', ''])}"
-            },
+            "ExternalSources": [
+                ${
+                    range(fake.random.number({min: 1, max: 1})).map(
+                        function(item, i)
+                        {
+                            return `"${fake.helpers.randomize(['consul', 'nomad', 'terraform', 'kubernetes', ''])}"`;
+                        }
+                    )
+                }
+
+            ],
 ` : `` }
             "Nodes":[
               ${
