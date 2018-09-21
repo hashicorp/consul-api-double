@@ -7,12 +7,23 @@
       )
     ).map(
       function(item, i) {
+        if(i === 0) {
+          return `
+            {
+              "ID": "00000000-0000-0000-0000-000000000000",
+              "Name": "global-management",
+              "Description": "Built-In Management Policy",
+              "CreateIndex": 10,
+              "ModifyIndex": 10
+            }
+          `
+        }
         return `
           {
             "ID": "${fake.random.uuid()}",
-            "Name": "policy-${i}",
+            "Name": "${fake.hacker.noun()}-${i}",
             "Description": "${fake.lorem.sentence()}",
-            "Datacenters": ${fake.helpers.randomize(['null', '["dc-1", "dc-2"]'])},
+            "Datacenters": ${fake.helpers.randomize(['["aq west-5", "ch east-4"]'])},
             "CreateIndex": 10,
             "ModifyIndex": 10
           }

@@ -11,8 +11,22 @@
           {
             "AccessorID": "${fake.random.uuid()}",
             "Name": "token-${i}",
-            "Policies": ["Policy Name"],
+            "Policies": [
+              ${
+                range(env('CONSUL_POLICY_COUNT', 10)).map(
+                  function() {
+                    return `
+                      {
+                        "ID": "${fake.random.uuid()}",
+                        "Name": "${fake.hacker.noun()}"
+                      }
+                    `;
+                  }
+                )
+              }
+            ],
  ${ fake.random.boolean() ? '"Legacy": true,' : "" }
+ ${ fake.random.boolean() ? '"Local": true,' : "" }
             "CreateTime": "2017-08-23T22:47:14.695408057Z",
             "CreateIndex": 10,
             "ModifyIndex": 10

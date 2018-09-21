@@ -1,8 +1,8 @@
 {
   "ID": "${location.pathname.get(3)}",
-  "Name": "${fake.hacker.noun()}",
+  "Name": "${fake.hacker.noun()}-policy",
   "Description": "${fake.lorem.sentence()}",
-  "Datacenters": ${fake.helpers.randomize(['null', '["dc-1", "dc-2"]'])},
+  "Datacenters": ${fake.helpers.randomize(['["aq west-5", "ch east-4"]'])},
   "Rules": "key \"foo\" { policy = \"write\" }"
 }
 
