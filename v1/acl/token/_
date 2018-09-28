@@ -5,11 +5,11 @@
   "Type": "client",
   "Policies": [
     ${
-      range(env('CONSUL_POLICY_COUNT', 10)).map(
-        function() {
+      range(env('CONSUL_POLICY_COUNT', 3)).map(
+        function(item, i) {
           return `
             {
-              "ID": "${fake.random.uuid()}",
+              "ID": "${fake.random.uuid()}-${i}",
               "Name": "${fake.hacker.noun()}"
             }
           `;

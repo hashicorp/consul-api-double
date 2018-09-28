@@ -3,7 +3,7 @@
     range(
       env(
         'CONSUL_POLICY_COUNT',
-        100
+        10
       )
     ).map(
       function(item, i) {

@@ -1,7 +1,7 @@
 ${
   location.pathname.get(2) === 'policy' && http.method === 'POST' ? `
 {
-  "ID": "${fake.random.uuid()}",
+  "ID": "${fake.random.uuid()}-${new Date().getTime()}",
   "Name": "${body.Name || ''}",
   "Description": "${body.Description || ''}",
   "Datacenters": ${fake.helpers.randomize(['null', '["dc-1", "dc-2"]'])},

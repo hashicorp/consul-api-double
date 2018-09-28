@@ -14,7 +14,15 @@
             "Policies": [
               ${
                 range(env('CONSUL_POLICY_COUNT', 10)).map(
-                  function() {
+                  function(item, j) {
+                    if(i == 0 && j == 0) {
+                      return `
+                        {
+                          "ID": "00000000-0000-0000-0000-000000000000",
+                          "Name": "global-management"
+                        }
+                      `;
+                    }
                     return `
                       {
                         "ID": "${fake.random.uuid()}",
