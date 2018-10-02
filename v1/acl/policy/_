@@ -1,13 +1,13 @@
 {
   "ID": "${location.pathname.get(3)}",
-  "Description": "${location.pathname.get(3) === '00000000-0000-0000-0000-000000000000' ? 'Built-in Management Policy' : fake.lorem.sentence()}",
-${ location.pathname.get(3) !== '00000000-0000-0000-0000-000000000000' ? `
+  "Description": "${location.pathname.get(3) === '00000000-0000-0000-0000-000000000001' ? 'Built-in Management Policy' : fake.lorem.sentence()}",
+${ location.pathname.get(3) !== '00000000-0000-0000-0000-000000000001' ? `
   "Datacenters": ${fake.helpers.randomize(['["aq west-5", "ch east-4"]'])},
   "Rules": ${JSON.stringify(
 `key "foo" {
   policy = "write"
 }`)},
 ` : "" }
-  "Name": "${location.pathname.get(3) === '00000000-0000-0000-0000-000000000000' ? 'global-management' : fake.hacker.noun() + '-policy'}"
+  "Name": "${location.pathname.get(3) === '00000000-0000-0000-0000-000000000001' ? 'global-management' : fake.hacker.noun() + '-policy'}"
 }
 

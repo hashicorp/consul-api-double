@@ -10,7 +10,7 @@
         if(i === 0) {
           return `
             {
-              "ID": "00000000-0000-0000-0000-000000000000",
+              "ID": "00000000-0000-0000-0000-000000000001",
               "Name": "global-management",
               "Description": "Built-In Management Policy",
               "CreateIndex": 10,

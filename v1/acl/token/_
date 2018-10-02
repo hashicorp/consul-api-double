@@ -17,7 +17,7 @@
       )
     }
   ],
-  ${ fake.random.boolean() && location.pathname.get(3) !== '00000000-0000-0000-0000-000000000000' ? '"Legacy": true,' : "" }
+  ${ fake.random.boolean() && location.pathname.get(3) !== '00000000-0000-0000-0000-000000000002' ? '"Legacy": true,' : "" }
   ${ fake.random.boolean() ? '"Local": true,' : "" }
   "CreateTime":"2017-08-23T22:47:14.695408057Z",
   "CreateIndex":7,
