@@ -18,6 +18,6 @@ ${
     "CreateIndex":7,
     "ModifyIndex":7
 }
-  ` : ``
+  ` : `true`
 }
 
