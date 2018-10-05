@@ -33,7 +33,7 @@
                 )
               }
             ],
- ${ fake.random.boolean() && i !== 0 ? '"Legacy": true,' : "" }
+ ${ fake.random.boolean() ? '"Legacy": true,' : "" }
  ${ fake.random.boolean() ? '"Local": true,' : "" }
             "CreateTime": "2017-08-23T22:47:14.695408057Z",
             "CreateIndex": 10,
@@ -44,4 +44,3 @@
     )
   }
 ]
-
