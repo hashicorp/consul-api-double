@@ -2,7 +2,6 @@
   "AccessorID": "${location.pathname.get(3)}",
   "SecretID":"${fake.random.uuid()}",
   "Name": "${fake.hacker.noun()}",
-  "Type": "client",
  ${ fake.random.boolean() ? '"Legacy": true,' }
   "Policies": ["dc2-service-register", "global-service-read"],
   "CreateTime":"2017-08-23T22:47:14.695408057Z",
