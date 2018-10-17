@@ -9,13 +9,13 @@
       function(item, i) {
         return `
           {
-            "AccessorID": "${i === 0 ? '00000000-0000-0000-0000-000000000002' : fake.random.uuid()}",
+            "AccessorID": "${i === 1 ? '00000000-0000-0000-0000-000000000002' : fake.random.uuid()}",
             "Name": "token-${i}",
             "Policies": [
               ${
                 range(env('CONSUL_POLICY_COUNT', 10)).map(
                   function(item, j) {
-                    if(i == 0 && j == 0) {
+                    if(i == 1 && j == 0) {
                       return `
                         {
                           "ID": "00000000-0000-0000-0000-000000000001",
@@ -33,7 +33,7 @@
                 )
               }
             ],
- ${ fake.random.boolean() ? '"Legacy": true,' : "" }
+ ${ fake.random.boolean() && i !== 1 ? '"Legacy": true,' : "" }
  ${ fake.random.boolean() ? '"Local": true,' : "" }
             "CreateTime": "2017-08-23T22:47:14.695408057Z",
             "CreateIndex": 10,
@@ -44,3 +44,4 @@
     )
   }
 ]
+
