@@ -1,6 +1,15 @@
 [
   ${
-    range(env('CONSUL_SESSION_COUNT', 5)).map(
+    range(
+      env(
+        'CONSUL_SESSION_COUNT',
+        Math.floor(
+          (
+            Math.random() * env('CONSUL_SESSION_MAX', 5)
+          ) + parseInt(env('CONSUL_SESSION_MIN', 1))
+        )
+      )
+    ).map(
         function(item, i) {
             // TTL = "" | 10:84600
             return `{

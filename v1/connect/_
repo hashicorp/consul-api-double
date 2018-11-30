@@ -2,7 +2,16 @@ ${
   location.pathname.get(2) === 'intentions' ? `
 [
   ${
-    range(env('CONSUL_INTENTION_COUNT', (location.search.index || 99))).map(
+    range(
+      env(
+        'CONSUL_INTENTION_COUNT',
+        Math.floor(
+          (
+            Math.random() * env('CONSUL_INTENTION_MAX', 10)
+          ) + parseInt(env('CONSUL_INTENTION_MIN', 1))
+        )
+      )
+    ).map(
       function(item, i)
       {
         return `
@@ -29,8 +38,8 @@ ${
     )
   }
 ]
-  
+
   ` : `
-  
+
   `
 }

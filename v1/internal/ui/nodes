@@ -1,6 +1,15 @@
 [
   ${
-    range(env('CONSUL_NODE_COUNT', 100)).map(
+    range(
+      env(
+        'CONSUL_NODE_COUNT',
+        Math.floor(
+          (
+            Math.random() * env('CONSUL_NODE_MAX', 10)
+          ) + parseInt(env('CONSUL_NODE_MIN', 1))
+        )
+      )
+    ).map(
       function(item, i)
       {
         return `

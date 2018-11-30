@@ -17,11 +17,20 @@
             "Name":"service-${i}",
             "Tags": [
                 ${
-                    range(env('CONSUL_TAG_COUNT', Math.floor(Math.random() * 5) + 1)).map(
-                        function(item, i)
-                        {
-                            return `"${fake.hacker.noun()}"`;
-                        }
+                    range(
+                      env(
+                        'CONSUL_TAG_COUNT',
+                        Math.floor(
+                          (
+                            Math.random() * env('CONSUL_TAG_MAX', 10)
+                          ) + parseInt(env('CONSUL_TAG_MIN', 1))
+                        )
+                      )
+                    ).map(
+                      function(item, i)
+                      {
+                          return `"${fake.hacker.noun()}"`;
+                      }
                     )
                 }
             ],

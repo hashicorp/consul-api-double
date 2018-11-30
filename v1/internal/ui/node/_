@@ -8,7 +8,16 @@
   },
   "Services":[
     ${
-      range(fake.random.number(10) + 1).map(
+      range(
+        env(
+          'CONSUL_SERVICE_COUNT',
+          Math.floor(
+            (
+              Math.random() * env('CONSUL_SERVICE_MAX', 10)
+            ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
+          )
+        )
+      ).map(
         function(item, i)
         {
           const service = `service-${i}`;
@@ -18,7 +27,16 @@
               "Service":"${service}",
               "Tags":[
                 ${
-                  range(env('CONSUL_TAG_COUNT', fake.random.number(10))).map(
+                  range(
+                    env(
+                      'CONSUL_TAG_COUNT',
+                      Math.floor(
+                        (
+                          Math.random() * env('CONSUL_TAG_MAX', 10)
+                        ) + parseInt(env('CONSUL_TAG_MIN', 1))
+                      )
+                    )
+                  ).map(
                     function(item, i)
                     {
                       return `"${fake.hacker.noun()}"`;

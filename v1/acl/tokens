@@ -1,9 +1,14 @@
+${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find method ACL.Method` : `
 [
   ${
     range(
       env(
         'CONSUL_TOKEN_COUNT',
-        100
+        Math.floor(
+          (
+            Math.random() * env('CONSUL_TOKEN_MAX', 10)
+          ) + parseInt(env('CONSUL_TOKEN_MIN', 1))
+        )
       )
     ).map(
       function(item, i) {
@@ -44,4 +49,4 @@
     )
   }
 ]
-
+`}
