@@ -15,6 +15,8 @@
         const node = `node-${i}`;
         const service = location.pathname.slice(4);
         const ip = fake.internet.ip();
+        const proxy = service.indexOf('-proxy')
+        const sidecar = service.indexOf('-sidecar-proxy')
         return `
         {
           "Node":{
@@ -38,13 +40,46 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
 ` : `` }
             "Address":"${fake.internet.ip()}",
             "Port":${fake.random.number({min: 0, max: 65535})},
+            "Kind": "${proxy !== -1 ? `connect-proxy`: `consul`}",
+            "Proxy": {
+${proxy !== -1 && sidecar === -1 ? `
+              "DestinationServiceName": "${service.substr(0, proxy)}",
+` : ``}
+${sidecar !== -1 ? `
+              "DestinationServiceName": "${service.substr(0, sidecar)}",
+              "DestinationServiceID": "${service.substr(0, sidecar)}-ID",
+              "LocalServiceAddress": "${fake.internet.ip()}",
+              "LocalServicePort": ${fake.random.number({min: 0, max: 65535})},
+` : ``}
+${proxy !== -1 ? `
+              "Upstreams": [
+              ${
+                range(env('CONSUL_UPSTREAM_COUNT', 10)).map(
+                  function(item, j) {
+                    return `
+                    {
+                      "Datacenter": "${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${j}",
+                      "DestinationName": "${fake.hacker.noun()}",
+                      "DestinationType": "${fake.helpers.randomize(['service', 'prepared_query'])}",
+                      "LocalBindAddress": "${fake.internet.ip()}",
+                      "LocalBindPort": ${fake.random.number({min: 0, max: 65535})}
+                    }
+                    `;
+                  }
+                )
+              }
+              ]` :
+              ``
+            }
+            },
+            "ProxyDestination": "",
             "EnableTagOverride":false,
             "CreateIndex":5,
             "ModifyIndex":5
           },
           "Checks":[
           ${
-            range(env('CONSUL_CHECK_COUNT', 3)).map(
+            range(env('CONSUL_CHECK_COUNT', 10)).map(
               function(item, j) {
                 const passing = i > 7 || j > fake.random.number(4);
                 return `
@@ -55,7 +90,7 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
                   "Status":"${ passing ? "passing" : fake.helpers.randomize(['warning', 'critical'])}",
                   "Notes":"Notes in here",
                   "Output":"${ passing ? "happy" : fake.helpers.randomize(['not in a good way', 'not happy'])}",
-                  "ServiceID":"",
+                  "ServiceID":"${ fake.helpers.randomize([service, ''])}",
                   "ServiceName":"",
                   "ServiceTags":["Tag"],
                   "Definition":{},

@@ -1,26 +1,43 @@
 [
+  ${ location.pathname.slice(4).indexOf('-proxy') !== -1 ? `` :`
   {
     "ID": "4ffed935-439c-695d-4f51-f4fc0b12a7a7",
-    "Node": "iMac.lan",
-    "Address": "127.0.0.1",
+    "Node": "node-0",
+    "Address": "${fake.internet.ip()}",
     "Datacenter": "dc1",
     "TaggedAddresses": {
-      "lan": "127.0.0.1",
-      "wan": "127.0.0.1"
+      "lan": "${fake.internet.ip()}",
+      "wan": "${fake.internet.ip()}"
     },
     "NodeMeta": {
       "consul-network-segment": ""
     },
+    "ServiceConnect": {},
     "ServiceKind": "connect-proxy",
-    "ServiceID": "web-proxy",
-    "ServiceName": "web-proxy",
-    "ServiceTags": [],
-    "ServiceAddress": "",
+    "ServiceID": "${location.pathname.slice(4)}-proxy",
+    "ServiceName": "${location.pathname.slice(4)}-proxy",
+    "ServiceTags": ["Tag", "Another Tag"],
+    "ServiceAddress": "${fake.internet.ip()}",
     "ServiceMeta": {},
     "ServicePort": 20199,
     "ServiceEnableTagOverride": false,
-    "ServiceProxyDestination": "web",
+    "ServiceProxy": {
+      "DestinationServiceName": "${location.pathname.slice(4)}"
+      ${ location.pathname.slice(4) === "service-0" ? `
+      ,
+      "DestinationServiceID": "${location.pathname.slice(4)}-with-id",
+      "LocalServiceAddress": "${fake.internet.ip()}",
+      "LocalServicePort": ${fake.random.number({min: 0, max: 65535})}
+      `
+      : ``}
+    },
+    "ServiceProxyDestination": "${location.pathname.slice(4)}",
+    "ServiceWeights": {
+      "Passing": 1,
+      "Warning": 1
+    },
     "CreateIndex": 11,
     "ModifyIndex": 11
   }
+  `}
 ]
