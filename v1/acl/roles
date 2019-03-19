@@ -3,21 +3,20 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
   ${
     range(
       env(
-        'CONSUL_TOKEN_COUNT',
+        'CONSUL_ROLE_COUNT',
         Math.floor(
           (
-            Math.random() * env('CONSUL_TOKEN_MAX', 10)
-          ) + parseInt(env('CONSUL_TOKEN_MIN', 1))
+            Math.random() * env('CONSUL_ROLE_MAX', 10)
+          ) + parseInt(env('CONSUL_ROLE_MIN', 1))
         )
       )
     ).map(
       function(item, i) {
         return `
           {
-            "AccessorID": "${i === 1 ? '00000000-0000-0000-0000-000000000002' : fake.random.uuid()}",
-            "Name": "token-${i}",
-            "IDPName": "${fake.hacker.noun()}",
-            "ExpirationTime": "2017-08-23T22:47:14.695408057Z",
+            "ID": "${fake.random.uuid()}",
+            "Name": "${fake.hacker.noun()}-${i}",
+            "Description": "${fake.lorem.sentence()}",
             "Policies": [
               ${
                 range(env('CONSUL_POLICY_COUNT', 10)).map(
@@ -30,20 +29,6 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
                         }
                       `;
                     }
-                    return `
-                      {
-                        "ID": "${fake.random.uuid()}",
-                        "Name": "${fake.hacker.noun()}"
-                      }
-                    `;
-                  }
-                )
-              }
-            ],
-            "Roles": [
-              ${
-                range(env('CONSUL_ROLE_COUNT', 10)).map(
-                  function(item, j) {
                     return `
                       {
                         "ID": "${fake.random.uuid()}",
@@ -67,9 +52,6 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
                 )
               }
             ],
- ${ fake.random.boolean() && i !== 1 ? '"Legacy": true,' : "" }
- ${ fake.random.boolean() ? '"Local": true,' : "" }
-            "CreateTime": "2017-08-23T22:47:14.695408057Z",
             "CreateIndex": 10,
             "ModifyIndex": 10
           }
