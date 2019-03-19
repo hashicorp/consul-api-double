@@ -1,6 +1,6 @@
 {
   "ID": "${location.pathname.get(3)}",
-  "Name": "${fake.hacker.noun() + '-role'}"
+  "Name": "${fake.hacker.noun() + '-role'}",
   "Description": "${fake.lorem.sentence()}",
   "Policies": [
     ${
