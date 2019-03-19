@@ -1,5 +1,7 @@
 {
-  "ID": "${ location.pathname.get(3) }",
+  "ID": "${ location.pathname.get(3) }"
+${
+  http.method !== "PUT" ? `,
   "Description": "${fake.lorem.sentence()}",
   "SourceNS": "default",
   "SourceName": "${fake.hacker.noun()}",
@@ -15,5 +17,6 @@
   "UpdatedAt": "2018-05-21T16:41:27.977157724Z",
   "CreateIndex": 11,
   "ModifyIndex": 11
+  ` : ``}
 }
 
