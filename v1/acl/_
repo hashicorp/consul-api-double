@@ -18,6 +18,11 @@ ${
     "CreateIndex":7,
     "ModifyIndex":7
 }
+` : location.pathname.get(2) === 'role' && http.method === 'PUT' ?
+  `
+{
+  "ID": "${fake.random.uuid()}-1"
+}
   ` : `true`
 }
 

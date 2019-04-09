@@ -1,6 +1,5 @@
 ${
   location.pathname.get(2) === 'intentions' ? `
-  ${ http.method !== 'POST' ? `
 [
   ${
     range(
@@ -39,10 +38,8 @@ ${
     )
   }
 ]
-` : `
-  {
-    "ID": "${fake.random.uuid()}"
-  }
-`}
-` : ``
+
+  ` : `
+
+  `
 }
