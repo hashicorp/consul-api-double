@@ -1,6 +1,8 @@
 {
   "AccessorID": "${location.pathname.get(3)}",
   "SecretID":"${fake.random.uuid()}",
+  "IDPName": "${fake.hacker.noun()}",
+  "ExpirationTime": "2017-08-23T22:47:14.695408057Z",
   ${ location.pathname.get(3) === '00000000-0000-0000-0000-000000000002' ?
     `
       "Name": "${fake.hacker.noun()}",
@@ -26,6 +28,33 @@ node "node-0" {
                 {
                   "ID": "${fake.random.uuid()}-${i}",
                   "Name": "${fake.hacker.noun()}"
+                }
+              `;
+            }
+          )
+        }
+      ],
+      "Roles": [
+        ${
+          range(env('CONSUL_ROLE_COUNT', 10)).map(
+            function(item, j) {
+              return `
+                {
+                  "ID": "${fake.random.uuid()}",
+                  "Name": "${fake.hacker.noun()}"
+                }
+              `;
+            }
+          )
+        }
+      ],
+      "ServiceIdentities": [
+        ${
+          range(env('CONSUL_IDENTITY_COUNT', 3)).map(
+            function(item, i) {
+              return `
+                {
+                  "ServiceName": "${fake.hacker.noun()}"
                 }
               `;
             }

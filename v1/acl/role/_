@@ -1,0 +1,33 @@
+{
+  "ID": "${location.pathname.get(3)}",
+  "Name": "${fake.hacker.noun() + '-role'}",
+  "Description": "${fake.lorem.sentence()}",
+  "Policies": [
+    ${
+      range(env('CONSUL_POLICY_COUNT', 3)).map(
+        function(item, i) {
+          return `
+            {
+              "ID": "${fake.random.uuid()}-${i}",
+              "Name": "${fake.hacker.noun()}"
+            }
+          `;
+        }
+      )
+    }
+  ],
+  "ServiceIdentities": [
+    ${
+      range(env('CONSUL_IDENTITY_COUNT', 3)).map(
+        function(item, i) {
+          return `
+            {
+              "ServiceName": "${fake.hacker.noun()}"
+            }
+          `;
+        }
+      )
+    }
+  ]
+}
+

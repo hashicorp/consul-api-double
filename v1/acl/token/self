@@ -1,7 +1,8 @@
 ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find method ACL.Method` : `
 {
   "AccessorID": "${fake.random.uuid()}",
-  "SecretID": "${headers['x-consul-token']}"
+  "SecretID": ${typeof headers['x-consul-token'] !== 'undefined' ? '"' + headers['x-consul-token'] + '"' : null},
+  "ExpirationTime": "2017-08-23T22:47:14.695408057Z"
 }
 `}
 
