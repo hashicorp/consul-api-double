@@ -2,7 +2,6 @@
   "AccessorID": "${location.pathname.get(3)}",
   "SecretID":"${fake.random.uuid()}",
   "IDPName": "${fake.hacker.noun()}",
-  "ExpirationTime": "2017-08-23T22:47:14.695408057Z",
   ${ location.pathname.get(3) === '00000000-0000-0000-0000-000000000002' ?
     `
       "Name": "${fake.hacker.noun()}",
@@ -50,11 +49,21 @@ node "node-0" {
       ],
       "ServiceIdentities": [
         ${
-          range(env('CONSUL_IDENTITY_COUNT', 3)).map(
+          range(env('CONSUL_IDENTITY_COUNT', 10)).map(
             function(item, i) {
               return `
                 {
-                  "ServiceName": "${fake.hacker.noun()}"
+                  "ServiceName": "${fake.hacker.noun()}"${ fake.random.boolean() ? `,
+                  "Datacenters": [
+                    ${
+                      range(env('CONSUL_DATACENTER_COUNT', fake.random.number({min: 1, max: 10}))).map(
+                          function(item, i) {
+                              return `"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}"`;
+                          }
+                      )
+                    }
+                  ]
+                  ` : ``}
                 }
               `;
             }

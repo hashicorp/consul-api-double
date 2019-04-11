@@ -17,7 +17,6 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
             "AccessorID": "${i === 1 ? '00000000-0000-0000-0000-000000000002' : fake.random.uuid()}",
             "Name": "token-${i}",
             "IDPName": "${fake.hacker.noun()}",
-            "ExpirationTime": "2017-08-23T22:47:14.695408057Z",
             "Policies": [
               ${
                 range(env('CONSUL_POLICY_COUNT', 10)).map(
@@ -56,11 +55,21 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
             ],
             "ServiceIdentities": [
               ${
-                range(env('CONSUL_IDENTITY_COUNT', 3)).map(
+                range(env('CONSUL_IDENTITY_COUNT', 10)).map(
                   function(item, i) {
                     return `
                       {
-                        "ServiceName": "${fake.hacker.noun()}"
+                        "ServiceName": "${fake.hacker.noun()}"${ fake.random.boolean() ? `,
+                        "Datacenters": [
+                          ${
+                            range(env('CONSUL_DATACENTER_COUNT', fake.random.number({min: 1, max: 10}))).map(
+                                function(item, i) {
+                                    return `"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}"`;
+                                }
+                            )
+                          }
+                        ]
+                        ` : ``}
                       }
                     `;
                   }
@@ -70,6 +79,7 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
  ${ fake.random.boolean() && i !== 1 ? '"Legacy": true,' : "" }
  ${ fake.random.boolean() ? '"Local": true,' : "" }
             "CreateTime": "2017-08-23T22:47:14.695408057Z",
+            "Hash": "${fake.internet.password(64)}=",
             "CreateIndex": 10,
             "ModifyIndex": 10
           }

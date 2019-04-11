@@ -41,11 +41,21 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
             ],
             "ServiceIdentities": [
               ${
-                range(env('CONSUL_IDENTITY_COUNT', 3)).map(
+                range(env('CONSUL_IDENTITY_COUNT', 10)).map(
                   function(item, i) {
                     return `
                       {
-                        "ServiceName": "${fake.hacker.noun()}"
+                        "ServiceName": "${fake.hacker.noun()}"${ fake.random.boolean() ? `,
+                        "Datacenters": [
+                          ${
+                            range(env('CONSUL_DATACENTER_COUNT', fake.random.number({min: 1, max: 10}))).map(
+                                function(item, i) {
+                                    return `"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}"`;
+                                }
+                            )
+                          }
+                        ]
+                        ` : ``}
                       }
                     `;
                   }
