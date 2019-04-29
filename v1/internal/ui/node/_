@@ -4,7 +4,8 @@
   "Address":"${ip = fake.internet.ip()}",
   "TaggedAddresses":{"lan":"${ip}","wan":"${ip}"},
   "Meta":{
-    "consul-network-segment":""
+    "consul-network-segment":"",
+    "consul-dashboard-url": "${fake.internet.protocol()}://${fake.internet.domainName()}/?id={{Node}}"
   },
   "Services":[
     ${
