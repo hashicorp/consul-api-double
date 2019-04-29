@@ -19,7 +19,7 @@ verify:
 		&& echo $$PACKAGE \
 		&& $(MAKE) ls-release
 ls-release:
-	@ARCHIVE=$$($(NPM) pack) && tar -tf $$ARCHIVE && rm $$ARCHIVE
+	@ARCHIVE=$$($(NPM) pack) && rm $$ARCHIVE
 release: verify;
 	@echo "Releasing as '$$($(NPM) whoami)'" \
 	  && git push && git push --tags
