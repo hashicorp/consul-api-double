@@ -1,5 +1,5 @@
 # release helpers
-.PHONY: major minor patch release ls-release verify
+.PHONY: major minor patch release verify
 NPM=npm
 major:
 minor:
@@ -17,9 +17,7 @@ verify:
 				else echo "Unable to release (package: $$VERSION != git: $$TAG)"; \
 			fi \
 		&& echo $$PACKAGE \
-		&& $(MAKE) ls-release
-ls-release:
-	@ARCHIVE=$$($(NPM) pack) && rm $$ARCHIVE
+		&& $(NPM) pack --dry-run
 release: verify;
 	@echo "Releasing as '$$($(NPM) whoami)'" \
 	  && git push && git push --tags
