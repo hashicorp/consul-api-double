@@ -14,7 +14,7 @@ verify:
 		TAG=$$(git describe --tags --dirty 2> /dev/null || echo '-') \
 		&& if [ "$$VERSION" = "$$TAG" ]; \
 				then echo "Able to release $$PACKAGE"; \
-				else echo "Unable to release (package: $$VERSION != git: $$TAG)"; \
+				else echo "Unable to release (package: $$VERSION != git: $$TAG)" && exit 1; \
 			fi \
 		&& echo $$PACKAGE \
 		&& $(NPM) pack --dry-run
