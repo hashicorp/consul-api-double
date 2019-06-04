@@ -1,5 +1,5 @@
 ${
-  location.pathname.get(2) === 'intentions' ? `
+  location.pathname.get(2) === 'intentions' && http.method === 'GET' ? `
 [
   ${
     range(
@@ -38,8 +38,9 @@ ${
     )
   }
 ]
-
-  ` : `
-
-  `
+  ` : location.pathname.get(2) === 'intentions' && http.method === 'POST' ? `
+{
+  "ID": "${ location.pathname.get(3) }"
+}
+  ` : ``
 }
