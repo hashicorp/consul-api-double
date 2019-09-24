@@ -69,6 +69,18 @@ ${sidecar !== -1 ? `
               "DestinationServiceID": "${service.substr(0, sidecar)}-ID",
               "LocalServiceAddress": "${fake.internet.ip()}",
               "LocalServicePort": ${fake.random.number({min: 0, max: 65535})},
+              "Expose": {
+                "Checks": ${fake.helpers.randomize(['true', 'false'])},
+                "Paths": [
+${range(env('CONSUL_EXPOSED_COUNT', 3)).map((i) => `
+        {
+          "Path": "/${fake.lorem.words(fake.random.number({min: 1, max: 5})).split(' ').join('/')}${fake.random.boolean() ? fake.system.fileName() : ''}",
+          "LocalPathPort": ${fake.random.number({min: 0, max: 65535})},
+          "ListenerPort": ${fake.random.number({min: 0, max: 65535})}
+        }
+`)}
+                ]
+              },
 ` : ``}
 ${proxy !== -1 ? `
               "Upstreams": [
