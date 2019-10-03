@@ -69,39 +69,33 @@ ${sidecar !== -1 ? `
               "DestinationServiceID": "${service.substr(0, sidecar)}-ID",
               "LocalServiceAddress": "${fake.internet.ip()}",
               "LocalServicePort": ${fake.random.number({min: 0, max: 65535})},
+` : ``}
+${proxy !== -1 ? `
               "Expose": {
-                "Checks": ${fake.helpers.randomize(['true', 'false'])},
+                "Checks": true,
                 "Paths": [
 ${range(env('CONSUL_EXPOSED_COUNT', 3)).map((i) => `
-        {
-          "Path": "/${fake.lorem.words(fake.random.number({min: 1, max: 5})).split(' ').join('/')}${fake.random.boolean() ? fake.system.fileName() : ''}",
-          "LocalPathPort": ${fake.random.number({min: 0, max: 65535})},
-          "ListenerPort": ${fake.random.number({min: 0, max: 65535})}
-        }
+                  {
+                    "Path": "/${fake.lorem.words(fake.random.number({min: 1, max: 5})).split(' ').join('/')}${fake.random.boolean() ? fake.system.fileName() : ''}",
+                    "Protocol": "${fake.helpers.randomize(['http', 'http2', 'grpc'])}",
+                    "LocalPathPort": ${fake.random.number({min: 0, max: 65535})},
+                    "ListenerPort": ${fake.random.number({min: 0, max: 65535})}
+                  }
 `)}
                 ]
               },
-` : ``}
-${proxy !== -1 ? `
               "Upstreams": [
-              ${
-                range(env('CONSUL_UPSTREAM_COUNT', 10)).map(
-                  function(item, j) {
-                    return `
-                    {
-                      "Datacenter": "${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${j}",
-                      "DestinationName": "${fake.hacker.noun()}",
-                      "DestinationType": "${fake.helpers.randomize(['service', 'prepared_query'])}",
-                      "LocalBindAddress": "${fake.internet.ip()}",
-                      "LocalBindPort": ${fake.random.number({min: 0, max: 65535})}
-                    }
-                    `;
+  ${range(env('CONSUL_UPSTREAM_COUNT', 10)).map((item, j) => `
+                  {
+                    "Datacenter": "${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${j}",
+                    "DestinationName": "${fake.hacker.noun()}",
+                    "DestinationType": "${fake.helpers.randomize(['service', 'prepared_query'])}",
+                    "LocalBindAddress": "${fake.internet.ip()}",
+                    "LocalBindPort": ${fake.random.number({min: 0, max: 65535})}
                   }
-                )
-              }
-              ]` :
-              ``
-            }
+  `)}
+              ]
+` : ``}
             },
             "ProxyDestination": "",
             "EnableTagOverride":false,
@@ -113,15 +107,17 @@ ${proxy !== -1 ? `
             range(env('CONSUL_CHECK_COUNT', 10)).map(
               function(item, j) {
                 const passing = i > 7 || j > fake.random.number(4);
+                const id = fake.helpers.randomize([service, '']);
                 return `
                 {
                   "Node":"${node}",
                   "CheckID":"${fake.hacker.noun()}Health",
                   "Name":"${fake.hacker.noun()} Status",
-                  "Status":"${ passing ? "passing" : fake.helpers.randomize(['warning', 'critical'])}",
-                  "Notes":"Notes in here",
-                  "Output":"${ passing ? "happy" : fake.helpers.randomize(['not in a good way', 'not happy'])}",
-                  "ServiceID":"${ fake.helpers.randomize([service, ''])}",
+                  "Type": "${j === 0 ? 'ttl' : (j === 1 ? 'http' : fake.helpers.randomize(['script', 'http', 'tcp', 'ttl', 'docker', 'grpc', 'alias']))}",
+                  "Status":"${j < 2 ? 'critical' : (passing ? "passing" : fake.helpers.randomize(['warning', 'critical']))}",
+                  "Notes":"${fake.lorem.paragraph()}",
+                  "Output":"${fake.internet.ipv6()} ${fake.internet.protocol()}://${fake.internet.userName()}:${fake.internet.password()}@${fake.internet.domainName()} ${fake.internet.userAgent()}",
+                  "ServiceID":"${j < 2 ? service : id}",
                   "ServiceName":"",
                   "ServiceTags":["Tag"],
                   "Definition":{},
