@@ -1,7 +1,29 @@
 [
-${range(env('CONSUL_NS_COUNT', 10)).map(() => `
    {
-    "Name": "${fake.hacker.noun()}-ns",
+    "Name": "default",
+    "Description": "The default namespace",
+    "Acl": {
+      "PolicyDefaults": [
+${range(env('CONSUL_POLICY_COUNT', 3)).map((i) => `
+          {
+            "ID": "${fake.random.uuid()}-${i}",
+            "Name": "${fake.hacker.noun()}-policy"
+          }
+`)}
+      ],
+      "RoleDefaults": [
+${range(env('CONSUL_ROLE_COUNT', 3)).map((i) => `
+          {
+            "ID": "${fake.random.uuid()}-${i}",
+            "Name": "${fake.hacker.noun()}-role"
+          }
+`)}
+      ]
+    }
+  },
+${range(env('CONSUL_NSPACE_COUNT', 10)).map((i) => `
+   {
+    "Name": "${fake.hacker.noun()}-ns-${i}",
     "Description": "${fake.lorem.sentence()}",
     "Acl": {
       "PolicyDefaults": [
