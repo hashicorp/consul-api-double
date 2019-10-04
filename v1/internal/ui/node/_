@@ -69,11 +69,12 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
           return `
             {
               "Node":"${location.pathname.get(4)}",
-              "CheckID":"Disk Util",
-              "Name":"Disk Util",
+              "CheckID":"${fake.hacker.noun()}Health",
+              "Name":"${fake.hacker.noun()} Status",
+              "Type": "${fake.helpers.randomize(['script', 'http', 'tcp', 'ttl', 'docker', 'grpc', 'alias'])}",
               "Status":"${fake.helpers.randomize(['passing', 'warning', 'critical'])}",
-              "Notes":"Critical 5%, warning 10% free",
-              "Output":"DISK OK - free space: / 17364 MB (90% inode=93%);| /=1806MB;18013;19014;0;20015",
+              "Notes":"${fake.lorem.paragraph()}",
+              "Output":"${fake.internet.ipv6()} ${fake.internet.protocol()}://${fake.internet.userName()}:${fake.internet.password()}@${fake.internet.domainName()} ${fake.internet.userAgent()}",
               "ServiceID":"",
               "ServiceName":"",
               "ServiceTags":null,
