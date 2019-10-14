@@ -21,7 +21,16 @@ ${range(env('CONSUL_ROLE_COUNT', 3)).map((i) => `
       ]
     }
   },
-${range(env('CONSUL_NSPACE_COUNT', 10)).map((i) => `
+${range(
+      env(
+        'CONSUL_NSPACE_COUNT',
+        Math.floor(
+          (
+            Math.random() * env('CONSUL_NSPACE_MAX', 10)
+          ) + parseInt(env('CONSUL_NSPACE_MIN', 1))
+        )
+      )
+).map((i) => `
    {
     "Name": "${fake.hacker.noun()}-ns-${i}",
     "Description": "${fake.lorem.sentence()}",
