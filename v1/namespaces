@@ -51,7 +51,7 @@ ${range(env('CONSUL_ROLE_COUNT', 3)).map((i) => `
 `)}
       ]
     },
-${faker.random.bool() ? `
+${fake.random.bool() ? `
     "Description": "${fake.lorem.sentence()}",
 ` : ``}
     "CreateIndex": 12,
