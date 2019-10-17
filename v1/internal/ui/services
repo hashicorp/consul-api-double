@@ -16,6 +16,9 @@
         return `
           {
             "Name":"service-${i}${ i !== 0 && kind === 'connect-proxy' ? fake.helpers.randomize(['-sidecar-proxy', '-proxy']) : '' }",
+${typeof location.search.ns !== 'undefined' ? `
+            "Namespace": "${location.search.ns}",
+` : ``}
             "Tags": [
                 ${
                     range(

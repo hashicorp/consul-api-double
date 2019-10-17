@@ -5,6 +5,9 @@
   ${ location.pathname.get(3) === '00000000-0000-0000-0000-000000000002' ?
     `
       "Name": "${fake.hacker.noun()}",
+${typeof location.search.ns !== 'undefined' ? `
+      "Namespace": "${location.search.ns}",
+` : ``}
       "Type":"${fake.helpers.randomize(['client', 'management'])}",
       "Rules": ${
             JSON.stringify(

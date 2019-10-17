@@ -36,6 +36,9 @@ ${
         "Key":"${
             location.pathname.slice(3)
         }",
+${typeof location.search.ns !== 'undefined' ? `
+        "Namespace": "${location.search.ns}",
+` : ``}
         "Flags":0,
         "Value":"VHVlIEZlYiAgNiAxMzoxOToyMiBVVEMgMjAxOA==",
         "CreateIndex":467034,

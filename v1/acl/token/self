@@ -2,7 +2,38 @@ ${ env('CONSUL_ACLS_LEGACY', false) ? `rpc error making call: rpc: can't find me
 {
   "AccessorID": "${fake.random.uuid()}",
   "SecretID": ${typeof headers['x-consul-token'] !== 'undefined' ? '"' + headers['x-consul-token'] + '"' : null},
-  "ExpirationTime": "2017-08-23T22:47:14.695408057Z"
+  "Namespace": "${location.search.ns || 'default'}",
+  "Local": false,
+  "Description": "${fake.lorem.sentence()}",
+  "Policies": [
+    ${
+      range(env('CONSUL_POLICY_COUNT', 3)).map(
+        function(item, i) {
+          return `
+            {
+              "ID": "${fake.random.uuid()}-${i}",
+              "Name": "${location.search.policy || fake.hacker.noun()}"
+            }
+          `;
+        }
+      )
+    }
+  ],
+  "Roles": [
+    ${
+      range(env('CONSUL_ROLE_COUNT', 10)).map(
+        function(item, j) {
+          return `
+            {
+              "ID": "${fake.random.uuid()}",
+              "Name": "${location.search.role || fake.hacker.noun()}"
+            }
+          `;
+        }
+      )
+    }
+  ],
+  "CreateTime": "2019-10-11T11:24:06.1385039Z"
 }
 `}
 

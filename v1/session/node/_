@@ -15,6 +15,9 @@
             return `{
                 "ID":"${fake.random.uuid()}",
                 "Name":"${fake.hacker.noun()}",
+${typeof location.search.ns !== 'undefined' ? `
+                "Namespace": "${location.search.ns}",
+` : ``}
                 "Node":"${location.pathname.get(3)}",
                 "Checks":["serfHealth"],
                 "LockDelay":15000000000,

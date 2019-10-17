@@ -13,6 +13,9 @@ ${ location.pathname.slice(4).indexOf('-proxy') !== -1 ? `[]` :`
     ).map((item, i) => `
       {
         "ID": "${fake.random.uuid()}",
+${typeof location.search.ns !== 'undefined' ? `
+        "Namespace": "${location.search.ns}",
+` : ``}
         "Node": "node-${i}",
         "Address": "${fake.internet.ip()}",
         "Datacenter": "${location.search.dc}",

@@ -32,6 +32,9 @@
           "Service":{
             "ID": "${ i === 0 ? 'service-0-with-id' : fake.helpers.randomize([service, service + '-ID'])}",
             "Service":"${service}",
+${typeof location.search.ns !== 'undefined' ? `
+            "Namespace": "${location.search.ns}",
+` : ``}
             "Tags":[
                 ${
                     range(
@@ -89,6 +92,7 @@ ${range(env('CONSUL_EXPOSED_COUNT', 3)).map((i) => `
                   {
                     "Datacenter": "${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${j}",
                     "DestinationName": "${fake.hacker.noun()}",
+                    "DestinationNamespace": "${fake.hacker.noun()}",
                     "DestinationType": "${fake.helpers.randomize(['service', 'prepared_query'])}",
                     "LocalBindAddress": "${fake.internet.ip()}",
                     "LocalBindPort": ${fake.random.number({min: 0, max: 65535})}

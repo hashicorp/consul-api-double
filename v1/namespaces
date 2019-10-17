@@ -2,7 +2,7 @@
    {
     "Name": "default",
     "Description": "The default namespace",
-    "Acl": {
+    "ACLs": {
       "PolicyDefaults": [
 ${range(env('CONSUL_POLICY_COUNT', 3)).map((i) => `
           {
@@ -33,8 +33,7 @@ ${range(
 ).map((i) => `
    {
     "Name": "${fake.hacker.noun()}-ns-${i}",
-    "Description": "${fake.lorem.sentence()}",
-    "Acl": {
+    "ACLs": {
       "PolicyDefaults": [
 ${range(env('CONSUL_POLICY_COUNT', 3)).map((i) => `
           {
@@ -52,6 +51,9 @@ ${range(env('CONSUL_ROLE_COUNT', 3)).map((i) => `
 `)}
       ]
     },
+${faker.random.bool() ? `
+    "Description": "${fake.lorem.sentence()}",
+` : ``}
     "CreateIndex": 12,
     "ModifyIndex": 16
   }

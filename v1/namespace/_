@@ -1,7 +1,7 @@
 {
   "Name": "${location.pathname.get(2)}",
   "Description": "${fake.lorem.sentence()}",
-  "Acl": {
+  "ACLs": {
     "PolicyDefaults": [
 ${range(env('CONSUL_POLICY_COUNT', 3)).map((i) => `
         {
