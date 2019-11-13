@@ -36,6 +36,19 @@ ${typeof location.search.ns !== 'undefined' ? `
         "ServicePort": ${fake.random.number({min: 21000, max: 21255})},
         "ServiceEnableTagOverride": false,
         "ServiceProxy": {
+          "Expose": {
+            "Checks": true,
+            "Paths": [
+${range(env('CONSUL_EXPOSED_COUNT', 3)).map((i) => `
+              {
+                "Path": "/${fake.lorem.words(fake.random.number({min: 1, max: 5})).split(' ').join('/')}${fake.random.boolean() ? fake.system.fileName() : ''}",
+                "Protocol": "${fake.helpers.randomize(['http', 'http2', 'grpc'])}",
+                "LocalPathPort": ${fake.random.number({min: 0, max: 65535})},
+                "ListenerPort": ${fake.random.number({min: 0, max: 65535})}
+              }
+`)}
+            ]
+          },
           "DestinationServiceName": "${location.pathname.slice(4)}"
           ${ location.pathname.slice(4) === "service-0" ? `
           ,
