@@ -1,6 +1,7 @@
 {
   "ID": "${location.pathname.get(3)}",
   "Name": "${fake.hacker.noun() + '-role'}",
+  "Namespace": "${typeof location.search.ns !== 'undefined' ? location.search.ns : 'default'}",
   "Description": "${fake.lorem.sentence()}",
   "Policies": [
     ${
