@@ -2,7 +2,10 @@
     {
         "ID":"${location.pathname.get(3)}",
         "Name":"${fake.hacker.noun()}",
-        "Namespace": "${typeof location.search.ns !== 'undefined' ? location.search.ns : 'default'}",
+        "Namespace": "${
+          typeof location.search.ns !== 'undefined' ? location.search.ns :
+            typeof http.body.Namespace !== 'undefined' ? http.body.Namespace : 'default'
+        }",
         "Node":"node-1",
         "Checks":["serfHealth"],
         "LockDelay":15000000000,
