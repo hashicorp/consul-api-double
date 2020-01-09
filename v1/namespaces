@@ -20,7 +20,7 @@ ${range(env('CONSUL_ROLE_COUNT', 3)).map((i) => `
 `)}
       ]
     }
-  },
+  }
 ${range(
       env(
         'CONSUL_NSPACE_COUNT',
@@ -29,8 +29,11 @@ ${range(
             Math.random() * env('CONSUL_NSPACE_MAX', 10)
           ) + parseInt(env('CONSUL_NSPACE_MIN', 1))
         )
-      )
-).map((i) => `
+      ) - 1
+).map(i => `
+${i === 0 ? `
+    ,
+` : ``}
    {
     "Name": "${fake.hacker.noun()}-ns-${i}",
     "ACLs": {
