@@ -4,33 +4,57 @@ ${
   	const ns = location.search.ns || 'default';
   	const dc = location.search.dc;
   	const service = location.pathname.get(2);
-
-		const resolvers = range(
+    const resolverCount = env(
+      'CONSUL_RESOLVER_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_RESOLVER_MAX', 10)
+        ) + parseInt(env('CONSUL_RESOLVER_MIN', 1))
+      )
+    );
+    // make some resolvers
+		let resolvers = range(
+  	  resolverCount
+  	).map(() => {
+  	  const service = fake.hacker.noun().split(' ').join('-');
+  	  return {
+  	    ServiceName: service,
+			  Name: `${service}.${ns}.${dc}`,
+			  Subsets: range(
+    			  env(
+      			  'CONSUL_SUBSET_COUNT',
+      			  Math.floor(
+        			  (
+          			  Math.random() * env('CONSUL_SUBSET_MAX', 3)
+        			  ) + parseInt(env('CONSUL_SUBSET_MIN', 1))
+      			  )
+    			  )
+  			  ).map((item) => `v${item + 1}`)
+  	  };
+  	});
+    // make some redirects
+		const redirects = range(
     	env(
-      	'CONSUL_RESOLVER_COUNT',
-      	Math.floor(
-        	(
-          	Math.random() * env('CONSUL_RESOLVER_MAX', 10)
-        	) + parseInt(env('CONSUL_RESOLVER_MIN', 1))
-      	)
+      	'CONSUL_REDIRECT_COUNT',
+        Math.floor(
+          (
+            Math.random() * env('CONSUL_REDIRECT_MAX', resolverCount)
+          ) + parseInt(env('CONSUL_REDIRECT_MIN', 0))
+        )
     	)
-  	).map(() => ({
-			Name: fake.hacker.noun().split(' ').join('-'),
-			Subsets: range(
-    			env(
-      			'CONSUL_SUBSET_COUNT',
-      			Math.floor(
-        			(
-          			Math.random() * env('CONSUL_SUBSET_MAX', 3)
-        			) + parseInt(env('CONSUL_SUBSET_MIN', 1))
-      			)
-    			)
-  			).map((item) => `v${item + 1}`)
-  	}));
+  	).map((item, i) => {
+  	  const service = resolvers[i].ServiceName;
+  	  return {
+  	    ServiceName: service,
+			  Name: `${service}.${ns}.redirect-${dc}`,
+			  Subsets: []
+  	  };
+  	});
 
-		const resolverTargets = resolvers.reduce(
+    // make some resolver targets with possible subsets
+		let resolverTargets = resolvers.reduce(
 			function(prev, resolver) {
-				const targets = [`${resolver.Name}.${ns}.${dc}`];
+				const targets = [`${resolver.Name}`];
 				return prev.concat(targets.concat(
 					resolver.Subsets.map(
 						function(item) {
@@ -43,6 +67,15 @@ ${
 			},
 			[]
 		);
+		const redirectTargets = redirects.map(
+			function(item) {
+				return `resolver:${item.Name}`;
+			}
+		);
+
+    resolverTargets = resolverTargets.concat(redirectTargets);
+  	resolvers = resolvers.concat(redirects);
+
 		const splitters = range(
     	env(
       	'CONSUL_SPLITTER_COUNT',
@@ -68,19 +101,20 @@ ${
         "NextNode": fake.helpers.randomize(resolverTargets)
       }))
 		}));
+
+
 		const splitterTargets = splitters.map(
 			function(item) {
 				return `splitter:${item.Name}`;
 			}
 		);
+
 		const nextNodes = resolverTargets.concat(splitterTargets);
 		return `
 {
   "Chain": {
     "ServiceName": "${service}",
-${typeof location.search.ns !== 'undefined' ? `
     "Namespace": "${ns}",
-` : ``}
     "Datacenter": "${dc}",
     "Protocol": "http",
     "StartNode": "router:${service}",
@@ -103,9 +137,10 @@ ${
   ).map((item, i) => {
 		const path = fake.helpers.randomize(['PathExact', 'PathPrefix', 'PathRegex', '']);
 		const splitter = fake.helpers.randomize(splitters);
+		const nextNode = fake.helpers.randomize(nextNodes);
 		return `
           {
-            "NextNode": "${fake.random.boolean() ? fake.helpers.randomize(splitterTargets) : fake.helpers.randomize(resolverTargets)}",
+            "NextNode": "${nextNode}",
             "Definition": {
               "Match": {
                 "HTTP": {
@@ -182,7 +217,7 @@ ${ fake.random.boolean() ? `
                 }
               },
               "Destination": {
-                "Service": "${service}",
+                "Service": "${nextNode}",
                 "PrefixRewrite": "/"
               }
             }
@@ -191,55 +226,52 @@ ${ fake.random.boolean() ? `
         ]
       },
 ${resolvers.map((resolver) => {
-	const id = `${resolver.Name}.${ns}.${dc}`;
-	const failover = `${resolver.Name}.${ns}`;
+	const failoverCount = env(
+    'CONSUL_FAILOVER_COUNT',
+    fake.helpers.randomize([0, 0, 0, 0, 0, 1, 2, 3])
+  );
+	const failover = ({
+	  Datacenter: `${resolver.Name.replace(`.${dc}`, `.fail-${dc}`)}`,
+	  Namespace: `${resolver.Name.replace(`.${ns}.`, `.fail-${ns}.`)}`,
+	})[env('CONSUL_FAILOVER_TYPE', 'Datacenter')];
+
 	return `
-			"resolver:${id}": {
+			"resolver:${resolver.Name}": {
         "Type": "resolver",
-      	"Name": "${id}",
+      	"Name": "${resolver.Name}",
         "Resolver": {
           "ConnectTimeout": "5s",
-${fake.random.boolean() ? `
+${failoverCount > 0 ? `
           "Failover": {
             "Targets": [
-  ${
-    range(
-      env(
-        'CONSUL_FAILOVER_COUNT',
-        fake.random.number({min: 1, max: 3})
-      )
-    ).map((item) => `
-              "${failover}.dc-${item + 1}"
-	  `)
-  }
+  ${range(failoverCount).map(item => `
+              "${failover.replace('fail-', `fail-${item + 1}-`)}"
+	`)}
             ]
           },
 ` : `` }
-          "Target": "${id}"
+          "Target": "${resolver.Name}"
         }
-			},
-			${resolver.Subsets.map((subset) => {
-				const id = `${subset}.${resolver.Name}.${ns}.${dc}`;
-	      const failover = `${subset}.${resolver.Name}.${ns}`;
+			}${resolver.Subsets.length > 0 ? ',' : ''}
+${resolver.Subsets.map((subset) => {
+		const id = `${subset}.${resolver.Name}`;
+	  const failover = ({
+	    Datacenter: `${subset}.${resolver.Name.replace(`.${dc}`, `.fail-${dc}`)}`,
+	    Namespace: `${subset}.${resolver.Name.replace(`.${ns}.`, `.fail-${ns}.`)}`,
+	  })[env('CONSUL_FAILOVER_TYPE', 'Datacenter')];
+
 				return `
       		"resolver:${id}": {
         		"Type": "resolver",
         		"Name": "${id}",
         		"Resolver": {
           		"ConnectTimeout": "5s",
-${fake.random.boolean() ? `
+${failoverCount > 0 ? `
               "Failover": {
                 "Targets": [
-  ${
-    range(
-      env(
-        'CONSUL_FAILOVER_COUNT',
-        fake.random.number({min: 1, max: 3})
-      )
-    ).map((item) => `
-                  "${failover}.dc-${item + 1}"
-	  `)
-  }
+  ${range(failoverCount).map(item => `
+                  "${failover.replace('fail-', `fail-${item + 1}-`)}"
+	`)}
                 ]
               },
 ` : `` }
@@ -254,7 +286,7 @@ ${splitters.map((item, i) => `
         "Type": "splitter",
         "Name": "${item.Name}",
         "Splits": [
-  ${item.Splits.map((item) => `
+  ${item.Splits.map(item => `
     			{
       			"Weight": ${item.Weight},
       			"NextNode": "${item.NextNode}"
@@ -265,27 +297,27 @@ ${splitters.map((item, i) => `
 `)}
     },
     "Targets": {
-${resolvers.map((item) => {
-	const id = `${item.Name}.${ns}.${dc}`;
-	const name = `${id}.internal.b4786482-efc4-9791-2e93-6fce8f2580d9.consul`;
+${resolvers.map(item => {
+  const uuid = fake.random.uuid();
+  const domain = 'consul';
+	const name = `${item.Name}.internal.${uuid}.${domain}`;
 	return `
-		"${id}": {
-      	"ID": "${id}",
-      	"Service": "${item.Name}",
+		"${item.Name}": {
+      	"ID": "${item.Name}",
+      	"Service": "${item.ServiceName}",
       	"Namespace": "${ns}",
       	"Datacenter": "${dc}",
-      	"MeshGateway": {
-      	},
+      	"MeshGateway": {},
       	"SNI": "${name}",
       	"Name": "${name}"
-		},
-		${item.Subsets.map((ktem) => {
-			const id = `${ktem}.${item.Name}.${ns}.${dc}`;
-			const name = `${id}.internal.b4786482-efc4-9791-2e93-6fce8f2580d9.consul`;
+		}${item.Subsets.length > 0 ? ',' : ''}
+${item.Subsets.map(ktem => {
+		const id = `${ktem}.${item.Name}`;
+		const name = `${id}.internal.${uuid}.${domain}`;
 			return `
       		"${id}": {
         		"ID": "${id}",
-        		"Service": "${item.Name}",
+        		"Service": "${item.ServiceName}",
         		"ServiceSubset": "${ktem}",
         		"Namespace": "${ns}",
         		"Datacenter": "${dc}",
