@@ -1,9 +1,37 @@
 ${
 	[1].map(() => {
+
   	const namespaces = ['default'];
   	const ns = location.search.ns || 'default';
   	const dc = location.search.dc;
   	const service = location.pathname.get(2);
+
+    const routeCount = env(
+      'CONSUL_ROUTE_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_ROUTE_MAX', 10)
+        ) + parseInt(env('CONSUL_ROUTE_MIN', 1))
+      )
+    );
+    const headerCount = env(
+      'CONSUL_HEADER_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_HEADER_MAX', 3)
+        ) + parseInt(env('CONSUL_HEADER_MIN', 1))
+      )
+    );
+
+    const queryParamCount = env(
+      'CONSUL_QUERYPARAM_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_QUERYPARAM_MAX', 3)
+        ) + parseInt(env('CONSUL_QUERYPARAM_MIN', 1))
+      )
+    );
+
     const resolverCount = env(
       'CONSUL_RESOLVER_COUNT',
       Math.floor(
@@ -12,6 +40,34 @@ ${
         ) + parseInt(env('CONSUL_RESOLVER_MIN', 1))
       )
     );
+    const redirectCount = env(
+      'CONSUL_REDIRECT_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_REDIRECT_MAX', resolverCount)
+        ) + parseInt(env('CONSUL_REDIRECT_MIN', 0))
+      )
+    );
+    const splitterCount = env(
+      'CONSUL_SPLITTER_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_SPLITTER_MAX', 5)
+        ) + parseInt(env('CONSUL_SPLITTER_MIN', 1))
+      )
+    );
+    const splitCount = env(
+      'CONSUL_SPLIT_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_SPLIT_MAX', 10)
+        ) + parseInt(env('CONSUL_SPLIT_MIN', 1))
+      )
+    );
+
+
+
+
     // make some resolvers
 		let resolvers = range(
   	  resolverCount
@@ -32,16 +88,10 @@ ${
   			  ).map((item) => `v${item + 1}`)
   	  };
   	});
+
     // make some redirects
 		const redirects = range(
-    	env(
-      	'CONSUL_REDIRECT_COUNT',
-        Math.floor(
-          (
-            Math.random() * env('CONSUL_REDIRECT_MAX', resolverCount)
-          ) + parseInt(env('CONSUL_REDIRECT_MIN', 0))
-        )
-    	)
+  	  redirectCount
   	).map((item, i) => {
   	  const service = resolvers[i].ServiceName;
   	  return {
@@ -77,25 +127,11 @@ ${
   	resolvers = resolvers.concat(redirects);
 
 		const splitters = range(
-    	env(
-      	'CONSUL_SPLITTER_COUNT',
-      	Math.floor(
-        	(
-          	Math.random() * env('CONSUL_SPLITTER_MAX', 5)
-        	) + parseInt(env('CONSUL_SPLITTER_MIN', 1))
-      	)
-    	)
+  	  splitterCount
   	).map(() => ({
-			Name: `${service}-${fake.hacker.noun()}`,
+			Name: `${service}-${fake.hacker.noun()}.${ns}`,
 			Splits: range(
-    		env(
-      		'CONSUL_SPLIT_COUNT',
-      		Math.floor(
-        		(
-          		Math.random() * env('CONSUL_SPLIT_MAX', 10)
-        		) + parseInt(env('CONSUL_SPLIT_MIN', 1))
-      		)
-    		)
+  		  splitCount
   		).map((item, i, arr) => ({
         "Weight": 100 / arr.length,
         "NextNode": fake.helpers.randomize(resolverTargets)
@@ -126,14 +162,7 @@ ${
         "Routes": [
 ${
   range(
-    env(
-      'CONSUL_ROUTE_COUNT',
-      Math.floor(
-        (
-          Math.random() * env('CONSUL_ROUTE_MAX', 10)
-        ) + parseInt(env('CONSUL_ROUTE_MIN', 1))
-      )
-    )
+    routeCount
   ).map((item, i) => {
 		const path = fake.helpers.randomize(['PathExact', 'PathPrefix', 'PathRegex', '']);
 		const splitter = fake.helpers.randomize(splitters);
@@ -151,14 +180,7 @@ ${ fake.random.boolean() ? `
                   ,"Header": [
 ${
 	range(
-    env(
-      'CONSUL_HEADER_COUNT',
-      Math.floor(
-        (
-          Math.random() * env('CONSUL_HEADER_MAX', 3)
-        ) + parseInt(env('CONSUL_HEADER_MIN', 1))
-      )
-    )
+	  headerCount
 	).map(item => `
 										{
 											"Name": "X-${fake.hacker.noun().split(' ').map(item => `${item.substr(0, 1).toUpperCase()}${item.substr(1)}`).join('-')}",
@@ -181,14 +203,7 @@ ${ fake.random.boolean() ? `
                   ,"QueryParam": [
 ${
 	range(
-    env(
-      'CONSUL_QUERYPARAM_COUNT',
-      Math.floor(
-        (
-          Math.random() * env('CONSUL_QUERYPARAM_MAX', 3)
-        ) + parseInt(env('CONSUL_QUERYPARAM_MIN', 1))
-      )
-    )
+	  queryParamCount
 	).map(item => `
 										{
 											"Name": "${fake.hacker.noun().split(' ').join('-')}",
@@ -231,8 +246,8 @@ ${resolvers.map((resolver) => {
     fake.helpers.randomize([0, 0, 0, 0, 0, 1, 2, 3])
   );
 	const failover = ({
-	  Datacenter: `${resolver.Name.replace(`.${dc}`, `.fail-${dc}`)}`,
-	  Namespace: `${resolver.Name.replace(`.${ns}.`, `.fail-${ns}.`)}`,
+	  Datacenter: `${resolver.Name.replace(`.${dc}`, `.fail-${dc}`).replace(`.redirect-${dc}`, `.fail-${dc}`)}`,
+	  Namespace: `${resolver.Name.replace(`.${ns}.`, `.fail-${ns}.`).replace(`.redirect-${ns}.`, `.fail-${ns}.`)}`,
 	})[env('CONSUL_FAILOVER_TYPE', 'Datacenter')];
 
 	return `
