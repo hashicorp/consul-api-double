@@ -12,10 +12,11 @@
     ).map(
       function(item, i)
       {
-        const kind = fake.helpers.randomize(['consul', 'connect-proxy']);
+        const kind = !(i % 2) ? 'consul' : 'connect-proxy';
+        const name = `service-${Math.floor(i / 2)}${ kind === 'connect-proxy' ? '-proxy' : '' }`;
         return `
           {
-            "Name":"service-${i}${ i !== 0 && kind === 'connect-proxy' ? fake.helpers.randomize(['-sidecar-proxy', '-proxy']) : '' }",
+            "Name":"${name}",
 ${typeof location.search.ns !== 'undefined' ? `
             "Namespace": "${location.search.ns}",
 ` : ``}
