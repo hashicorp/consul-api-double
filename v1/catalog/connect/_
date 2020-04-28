@@ -49,6 +49,24 @@ ${range(env('CONSUL_EXPOSED_COUNT', 3)).map((i) => `
 `)}
             ]
           },
+          "Upstreams": [
+            {
+              "Config": null,
+              "Datacenter": "${location.search.dc}",
+              "DestinationName": "service-2",
+              "DestinationType": "service",
+              "LocalBindPort": ${fake.random.number({min: 0, max: 65535})},
+              "MeshGateway": {}
+            },
+            {
+              "Config": null,
+              "Datacenter": "dc10",
+              "DestinationName": "service-3",
+              "DestinationType": "service",
+              "LocalBindPort": ${fake.random.number({min: 0, max: 65535})},
+              "MeshGateway": {}
+            }
+          ],
           "DestinationServiceName": "${location.pathname.slice(4)}"
           ${ location.pathname.slice(4) === "service-0" ? `
           ,
