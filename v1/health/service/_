@@ -17,6 +17,7 @@
         const ip = fake.internet.ip();
         const proxy = service.indexOf('-proxy')
         const sidecar = service.indexOf('-sidecar-proxy')
+        const id = (proxy !== -1 ? service.slice(0, -6) + '-with-id-proxy' : service + '-with-id');
         return `
         {
           "Node":{
@@ -30,7 +31,7 @@
             "ModifyIndex":6
           },
           "Service":{
-            "ID": "${ i === 0 ? 'service-0-with-id' : fake.helpers.randomize([service, service + '-ID'])}",
+            "ID": "${ i === 0 ? id : fake.helpers.randomize([service, service + '-ID'])}",
             "Service":"${service}",
 ${typeof location.search.ns !== 'undefined' ? `
             "Namespace": "${location.search.ns}",
