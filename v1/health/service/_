@@ -18,6 +18,22 @@
         const proxy = service.indexOf('-proxy')
         const sidecar = service.indexOf('-sidecar-proxy')
         const id = (proxy !== -1 ? service.slice(0, -6) + '-with-id-proxy' : service + '-with-id');
+        let kind = ''; 
+        switch(true) {
+          case service.endsWith('-mesh-gateway'):
+            kind = 'mesh-gateway';
+            break;
+          case service.endsWith('-terminating-gateway'):
+            kind = 'terminating-gateway';
+            break;
+          case service.endsWith('-ingress-gateway'):
+            kind = 'ingress-gateway';
+            break;
+          case service.endsWith('-proxy'):
+            kind = 'connect-proxy';
+            break;
+        }
+
         return `
         {
           "Node":{
@@ -63,7 +79,9 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
 ` : `` }
             "Address":"${fake.internet.ip()}",
             "Port":${fake.random.number({min: 0, max: 65535})},
-            "Kind": "${proxy !== -1 ? `connect-proxy`: `consul`}",
+${kind !== '' ? `
+            "Kind": "${kind}",
+` : `` }
             "Proxy": {
 ${proxy !== -1 && sidecar === -1 ? `
               "DestinationServiceName": "${service.substr(0, proxy)}",
