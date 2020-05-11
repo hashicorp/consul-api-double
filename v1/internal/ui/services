@@ -65,6 +65,9 @@ ${typeof location.search.ns !== 'undefined' ? `
                     )
                 }
             ],
+${kind === 'connect-proxy' ? `
+            "ProxyFor": ["service-${i - 1}"],
+` : `` }
 ${kind !== '' ? `
             "Kind": "${kind}",
 ` : `` }
