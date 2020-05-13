@@ -12,6 +12,11 @@
     ).map((item, i) => `
   {
     "Name": "service-${i}",
+${i === 1 ? `
+      "Namespace": "default",
+` : `
+      "Namespace": "${fake.hacker.noun()}-ns-${i}",
+`}
     "Tags": [
       ${
         range(env('CONSUL_TAG_COUNT', fake.random.number(10))).map(
