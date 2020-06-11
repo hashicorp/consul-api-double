@@ -10,8 +10,6 @@ ${
   "SourceType": "${fake.helpers.randomize(['consul', 'externaluri'])}",
   "Action": "${fake.helpers.randomize(['allow', 'deny'])}",
   "Precedence": ${fake.random.number({min: 1, max: 100})},
-  "DefaultAddr": "",
-  "DefaultPort": 0,
   "Meta": {},
   "CreatedAt": "2018-05-21T16:41:27.977155457Z",
   "UpdatedAt": "2018-05-21T16:41:27.977157724Z",
