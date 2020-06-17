@@ -22,11 +22,34 @@
   ],
   "ServiceIdentities": [
     ${
-      range(env('CONSUL_IDENTITY_COUNT', 10)).map(
+      range(env('CONSUL_SERVICE_IDENTITY_COUNT', env('CONSUL_IDENTITY_COUNT', 1))).map(
         function(item, i) {
           return `
             {
               "ServiceName": "${fake.hacker.noun()}"${ fake.random.boolean() ? `,
+              "Datacenters": [
+                ${
+                  range(env('CONSUL_DATACENTER_COUNT', fake.random.number({min: 1, max: 10}))).map(
+                      function(item, i) {
+                          return `"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}"`;
+                      }
+                  )
+                }
+              ]
+              ` : ``}
+            }
+          `;
+        }
+      )
+    }
+  ],
+  "NodeIdentities": [
+    ${
+      range(env('CONSUL_NODE_IDENTITY_COUNT', 1)).map(
+        function(item, i) {
+          return `
+            {
+              "NodeName": "${fake.hacker.noun()}"${ fake.random.boolean() ? `,
               "Datacenters": [
                 ${
                   range(env('CONSUL_DATACENTER_COUNT', fake.random.number({min: 1, max: 10}))).map(
