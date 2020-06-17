@@ -58,7 +58,7 @@ ${typeof location.search.ns !== 'undefined' ? `
             ],
             "ServiceIdentities": [
               ${
-                range(env('CONSUL_IDENTITY_COUNT', 10)).map(
+                range(env('CONSUL_SERVICE_IDENTITY_COUNT', env('CONSUL_IDENTITY_COUNT', 1))).map(
                   function(item, i) {
                     return `
                       {
@@ -73,6 +73,20 @@ ${typeof location.search.ns !== 'undefined' ? `
                           }
                         ]
                         ` : ``}
+                      }
+                    `;
+                  }
+                )
+              }
+            ],
+            "NodeIdentities": [
+              ${
+                range(env('CONSUL_NODE_IDENTITY_COUNT', 1)).map(
+                  function(item, i) {
+                    return `
+                      {
+                        "NodeName": "${fake.hacker.noun()}",
+                        "Datacenter":"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}" 
                       }
                     `;
                   }
