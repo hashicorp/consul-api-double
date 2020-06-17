@@ -72,16 +72,7 @@ ${typeof location.search.ns !== 'undefined' ? `
                     return `
                       {
                         "NodeName": "${fake.hacker.noun()}"${ fake.random.boolean() ? `,
-                        "Datacenters": [
-                          ${
-                            range(env('CONSUL_DATACENTER_COUNT', fake.random.number({min: 1, max: 10}))).map(
-                                function(item, i) {
-                                    return `"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}"`;
-                                }
-                            )
-                          }
-                        ]
-                        ` : ``}
+                        "Datacenter":"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}" 
                       }
                     `;
                   }
