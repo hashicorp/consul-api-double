@@ -59,7 +59,7 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
           range(fake.random.number(5)).map(
             function(item, i)
             {
-              return `"${fake.random.number({min: 1, max: 10}) > 8 ? `*.${fake.internet.domainName()}`: ``}:${fake.random.number({min: 0, max: 65535})}"`;
+              return `"${fake.random.number({min: 1, max: 10}) > 2 ? `*.${fake.internet.domainName()}`: ``}:${fake.random.number({min: 0, max: 65535})}"`;
             }
           )
         }
