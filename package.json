@@ -1,6 +1,6 @@
 {
   "name": "@hashicorp/consul-api-double",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Super simple API 'double' for easily visualizing the Consul API via the filesystem.",
   "license": "MPL-2.0",
   "repository": {
