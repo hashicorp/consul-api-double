@@ -1,3 +1,25 @@
+${[1].map(() => {
+
+  const services = range(
+    env(
+      'CONSUL_SERVICE_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_SERVICE_MAX', 10)
+        ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
+      )
+    )
+  ).map(
+    (item, i) => {
+      const service = `service-${i}`;
+      return {
+        "ID": i === 0 ? 'service-0-with-id' : fake.helpers.randomize([service, service + '-ID']),
+        "Service": service,
+      };
+    }
+  );
+
+return `
 {
   "ID":"${node = location.pathname.get(4)}",
   "Node":"${node}",
@@ -9,23 +31,14 @@
   },
   "Services":[
     ${
-      range(
-        env(
-          'CONSUL_SERVICE_COUNT',
-          Math.floor(
-            (
-              Math.random() * env('CONSUL_SERVICE_MAX', 10)
-            ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
-          )
-        )
-      ).map(
+      services.map(
         function(item, i)
         {
           const service = `service-${i}`;
           return `
             {
-              "ID": "${ i === 0 ? 'service-0-with-id' : fake.helpers.randomize([service, service + '-ID'])}",
-              "Service":"${service}",
+              "ID": "${item.ID}",
+              "Service":"${item.Service}",
               "Tags":[
                 ${
                   range(
@@ -63,9 +76,10 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
   ],
   "Checks":[
     ${
-      range(env('CONSUL_CHECK_COUNT', 3)).map(
+      range(env('CONSUL_CHECK_COUNT', 10)).map(
         function(item, i)
         {
+          const service = fake.random.number({min: 0, max: 10}) > 5 ? fake.helpers.randomize(services) : {ID: '', Service: ''};
           return `
             {
               "Node":"${location.pathname.get(4)}",
@@ -75,8 +89,8 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
               "Status":"${fake.helpers.randomize(['passing', 'warning', 'critical'])}",
               "Notes":"${fake.lorem.paragraph()}",
               "Output":"${fake.internet.ipv6()} ${fake.internet.protocol()}://${fake.internet.userName()}:${fake.internet.password()}@${fake.internet.domainName()} ${fake.internet.userAgent()}",
-              "ServiceID":"",
-              "ServiceName":"",
+              "ServiceID":"${service.ID}",
+              "ServiceName":"${service.Service}",
               "ServiceTags":null,
               "Definition":{},
               "CreateIndex":12,
@@ -87,4 +101,5 @@ ${ fake.random.number({min: 1, max: 10}) > 2 ? `
       )
     }
    ]
-}
+}`
+})}
