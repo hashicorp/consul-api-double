@@ -86,7 +86,7 @@ ${typeof location.search.ns !== 'undefined' ? `
                     return `
                       {
                         "NodeName": "${fake.hacker.noun()}",
-                        "Datacenter":"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}" 
+                        "Datacenter":"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}"
                       }
                     `;
                   }
@@ -95,7 +95,7 @@ ${typeof location.search.ns !== 'undefined' ? `
             ],
  ${ fake.random.boolean() && i !== 1 ? '"Legacy": true,' : "" }
  ${ fake.random.boolean() ? '"Local": true,' : "" }
-            "CreateTime": "2017-08-23T22:47:14.695408057Z",
+            "CreateTime": "${fake.date.past(10).toISOString()}",
             "Hash": "${fake.internet.password(64)}=",
             "CreateIndex": 10,
             "ModifyIndex": 10
