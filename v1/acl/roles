@@ -79,7 +79,7 @@ ${typeof location.search.ns !== 'undefined' ? `
                 )
               }
             ],
-            "CreateIndex": "${fake.random.number()}",
+            "CreateIndex": ${fake.random.number()},
             "ModifyIndex": 10
           }
         `
