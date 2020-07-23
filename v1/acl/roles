@@ -72,14 +72,14 @@ ${typeof location.search.ns !== 'undefined' ? `
                     return `
                       {
                         "NodeName": "${fake.hacker.noun()}",
-                        "Datacenter":"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}" 
+                        "Datacenter":"${fake.address.countryCode().toLowerCase()} ${ i % 2 ? "west" : "east"}-${i}"
                       }
                     `;
                   }
                 )
               }
             ],
-            "CreateIndex": 10,
+            "CreateIndex": "${fake.random.number()}",
             "ModifyIndex": 10
           }
         `
