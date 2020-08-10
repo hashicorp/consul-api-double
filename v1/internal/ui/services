@@ -65,9 +65,11 @@ ${typeof location.search.ns !== 'undefined' ? `
                     )
                 }
             ],
-${kind === 'connect-proxy' ? `
-            "ProxyFor": ["service-${i - 1}"],
-` : `` }
+            "ConnectedWithProxy":${fake.random.boolean()},
+            "ConnectedWithGateway":${fake.random.boolean()},
+            "GatewayConfig": {
+              "AssociatedServiceCount": ${fake.random.number({min: 1, max: 4000})}
+            },
 ${kind !== '' ? `
             "Kind": "${kind}",
 ` : `` }
