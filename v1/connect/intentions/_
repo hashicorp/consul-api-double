@@ -1,6 +1,6 @@
 ${range(1).map(item => {
     const ID = location.pathname.get(3);
-    const legacy = ID.indexOf(':') === -1;
+    const legacy = ID.indexOf('%3A') === -1;
 return `
   {
 ${legacy ? `
