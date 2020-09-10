@@ -4,10 +4,9 @@ ${range(1).map(item => {
 return `
   {
 ${legacy ? `
-    "ID": "${ID}",
+    "ID": "${ID}"
 `:``}
-  ${
-  http.method !== "PUT" ? `
+${ http.method !== "PUT" ? `${legacy ? `,` : ``}
     "Description": "${fake.lorem.sentence()}",
     "SourceNS": "default",
     "SourceName": "${fake.hacker.noun()}",
@@ -89,6 +88,6 @@ ${ !legacy && fake.random.number({min: 1, max: 10}) > 2 ? `
     "UpdatedAt": "2018-05-21T16:41:27.977157724Z",
     "CreateIndex": 11,
     "ModifyIndex": 11
-    ` : ``}
+` : ``}
   }
 `})}
