@@ -1,15 +1,17 @@
 ${range(1).map(item => {
-    const ID = location.pathname.get(3);
+    const ID = fake.random.uuid();
     const legacy = ID.indexOf('%3A') === -1;
+    const source = location.search.source.split('/');
+    const destination = location.search.destination.split('/');
 return `
   {
     "ID": "${legacy ? ID : ''}"
 ${ http.method !== "PUT" ? `
     ,"Description": "${fake.lorem.sentence()}",
-    "SourceNS": "default",
-    "SourceName": "${fake.hacker.noun()}",
-    "DestinationNS": "default",
-    "DestinationName": "${fake.hacker.noun()}",
+    "SourceNS": "${source[0]}",
+    "SourceName": "${source[1]}",
+    "DestinationNS": "${destination[0]}",
+    "DestinationName": "${destination[1]}",
     "SourceType": "${fake.helpers.randomize(['consul', 'externaluri'])}",
 ${legacy ? `
     "Action": "${fake.helpers.randomize(['allow', 'deny'])}",
@@ -51,24 +53,24 @@ ${ fake.random.boolean() ? `
                       ).filter(item => fake.random.boolean()).map(item => `
                         "${item}"
                       `)
-                      }
-                    ],
+                    }
+                  ],
 ` : ``}
-                "Header": [
+                  "Header": [
 ${range(headerCount).map(item => `
-                  {
-                    "Name": "X-${fake.hacker.noun().split(' ').map(item => `${item.substr(0, 1).toUpperCase()}${item.substr(1)}`).join('-')}",
+                    {
+                      "Name": "X-${fake.hacker.noun().split(' ').map(item => `${item.substr(0, 1).toUpperCase()}${item.substr(1)}`).join('-')}",
 ${fake.random.boolean() ? `
-                    "Invert": true,
+                      "Invert": true,
 ` : ``}
 ${fake.helpers.randomize([
-                    '"Present": true',
-                    '"Exact": "abc"',
-                    '"Prefix": "abc"',
-                    '"Suffix": "xyz"',
-                    '"Regex": "[abc]"'
+                      '"Present": true',
+                      '"Exact": "abc"',
+                      '"Prefix": "abc"',
+                      '"Suffix": "xyz"',
+                      '"Regex": "[abc]"'
 ])}
-                  }
+                    }
 `)}
                 ]
               }
