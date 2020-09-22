@@ -1,0 +1,66 @@
+{
+  "Upstreams":
+  [
+    ${
+      range(
+        env(
+          'CONSUL_SERVICE_COUNT',
+          Math.floor(
+            (
+              Math.random() * env('CONSUL_SERVICE_MAX', 10)
+            ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
+          )
+        )
+      ).map((item, i) => `
+    {
+      "Name": "service-${i}",
+      "Datacenter": "${fake.helpers.randomize(['dc-1', 'dc-2', 'dc-3'])}",
+  ${i === 1 ? `
+        "Namespace": "default",
+  ` : `
+        "Namespace": "${fake.hacker.noun()}-ns-${i}",
+  `}
+      "ChecksPassing":${fake.random.number({min: 1, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+      "ChecksWarning":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+      "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+      "Intention": {
+        "Allowed": ${fake.random.boolean()},
+        "HasL7Policies": ${fake.random.boolean()},
+        "Source": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
+      }
+    }
+      `)}
+  ],
+  "Downstreams":
+  [
+    ${
+      range(
+        env(
+          'CONSUL_SERVICE_COUNT',
+          Math.floor(
+            (
+              Math.random() * env('CONSUL_SERVICE_MAX', 10)
+            ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
+          )
+        )
+      ).map((item, i) => `
+    {
+      "Name": "service-${i}",
+      "Datacenter": "${fake.helpers.randomize(['dc-1', 'dc-2', 'dc-3'])}",
+  ${i === 1 ? `
+        "Namespace": "default",
+  ` : `
+        "Namespace": "${fake.hacker.noun()}-ns-${i}",
+  `}
+      "ChecksPassing":${fake.random.number({min: 1, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+      "ChecksWarning":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+      "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
+      "Intention": {
+        "Allowed": ${fake.random.boolean()},
+        "HasL7Policies": ${fake.random.boolean()},
+        "Source": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
+      }
+    }
+      `)}
+  ]
+}
