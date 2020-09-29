@@ -1,20 +1,29 @@
+${
+  [1].map(() => {
+    const dc = location.search.dc;
+    const serviceCount = env(
+      'CONSUL_SERVICE_COUNT',
+      Math.floor(
+        (
+          Math.random() * env('CONSUL_SERVICE_MAX', 10)
+        ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
+      )
+    );
+    return `
 {
   "Upstreams":
   [
     ${
       range(
-        env(
-          'CONSUL_SERVICE_COUNT',
-          Math.floor(
-            (
-              Math.random() * env('CONSUL_SERVICE_MAX', 10)
-            ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
-          )
-        )
+        serviceCount
       ).map((item, i) => `
     {
       "Name": "service-${i}",
-      "Datacenter": "${fake.helpers.randomize(['dc-1', 'dc-2', 'dc-3'])}",
+  ${i % 2 ? `
+      "Datacenter": "${dc}",
+  ` : `
+      "Datacenter": "${fake.address.countryCode().toLowerCase()}_${ i % 2 ? "west" : "east"}-${i}",
+  `}
   ${i === 1 ? `
         "Namespace": "default",
   ` : `
@@ -46,7 +55,12 @@
       ).map((item, i) => `
     {
       "Name": "service-${i}",
-      "Datacenter": "${fake.helpers.randomize(['dc-1', 'dc-2', 'dc-3'])}",
+  ${i % 2 ? `
+      "Datacenter": "${dc}",
+  ` : `
+      "Datacenter": "${fake.address.countryCode().toLowerCase()}_${ i % 2 ? "west" : "east"}-${i}",
+  `}
+
   ${i === 1 ? `
         "Namespace": "default",
   ` : `
@@ -63,4 +77,7 @@
     }
       `)}
   ]
+}`
+
+  })
 }
