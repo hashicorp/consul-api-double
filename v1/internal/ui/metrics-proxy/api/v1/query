@@ -1,0 +1,130 @@
+
+{
+  "status": "success",
+  "data": {
+    "resultType": "vector",
+    "result": [
+      ${
+        [1].map(function(_){
+          var type = "service";
+          var proto = "tcp";
+
+          var q = location.search.query;
+
+          // Match the relabel arguments since "downstream" appears in both
+          // "service" and "upstream" type queries' metric names while
+          // "upstream" appears in downstream query metric names (confusingly).
+          if (q.match('"upstream"')) {
+            type = "upstream";
+          } else if (q.match('"downstream"')) {
+            type = "downstream";
+          }
+
+          if (q.match('envoy_http_')) {
+            proto = "http";
+          }
+
+          // Pick a number of down/upstreams to return based on the cookie variable.
+          // If you change anything about this variable or it's default, you'll need
+          // to change the topology endpoint to match.
+          var numResults = 1;
+          if (type === "upstream") {
+            numResults = env("CONSUL_UPSTREAM_COUNT", 3);
+          }
+          if (type === "downstream") {
+            numResults = env("CONSUL_DOWNSTREAM_COUNT", 5);
+          }
+
+          // Seed faker by the number of results we want. It's important that this
+          // matches the seed used in the endpoint that returns the list of upstreams
+          // and downstreams so they match up deterministically. Note that there where
+          // both upstreams and downstreams are returned in one API, we'll need to
+          // reseed twice to use the right number for each.
+          fake.seed(numResults)
+
+          var serviceNames = [];
+          switch(type) {
+            case "downstream": // fallthrough
+            case "upstream":
+              for (var i = 0; i < numResults; i++) {
+                serviceNames.push(`service-${fake.random.number({min:0, max:99})}`)
+              }
+              break;
+            default:
+              // fallthrough
+            case "service":
+              // Parse the service name from the URL
+              var m = q.match(/local_cluster%3D%22([^%]*)%22/)
+              if (!m || m.length < 2 || m[1] == "") {
+                // Shouldn't happen but just make up something
+                serviceNames = ["invalid-local-cluster"];
+              } else {
+                serviceNames = [m[1]];
+              }
+              break;
+          }
+
+          // Work out which metric is being queried to make them more realistic.
+          var range = 100;
+          switch(proto) {
+            case "http":
+              if (q.match('envoy_response_code_class="5"')) {
+                // It's error rate make it a percentage
+                range = 30;
+              } else if (q.match("rq_completed")) {
+                // Requests per second
+                range = 1000;
+              } else if (q.match("quantile\\(0.99")) {
+                // 99 percentile time in ms make it longer than 50 percentile
+                range = 5000;
+              } else if (q.match("quantile\\(0.5")) {
+                // 50th percentile
+                range = 500;
+              }
+              break;
+            case "tcp":
+              if (q.match('cx_total')) {
+                // New conns per second
+                range = 100;
+              } else if (q.match('cx_rx_bytes')) {
+                // inbound data rate tends to be lower than outbound
+                range = 10e8;
+              } else if (q.match('cx_tx_bytes')) {
+                // inbound data rate
+                range = 10e9;
+              }
+              // no route/connect faile are OK with default 0-100
+              break;
+          }
+
+          var randExp = function(max, lambda) {
+            return (-Math.log(1-(1-Math.exp(-lambda))*Math.random())/lambda) * max;
+          }
+
+          // Now generate the data points
+          return serviceNames.map(function(name){
+            var metric = `{}`;
+            switch(type) {
+              default:
+                break;
+              case "upstream":
+                metric = `{"upstream": "${name}", "envoy_http_conn_manager_prefix": "${name}"}`;
+                break;
+              case "downstream":
+                metric = `{"downstream": "${name}", "local_cluster": "${name}"}`;
+                break;
+            }
+            return `{
+              "metric": ${metric},
+              "value": [
+               ${Date.now()/1000},
+               "${randExp(range, 20)}"
+              ]
+            }`;
+          }).join(",")
+
+        })[0]
+      }
+    ]
+  }
+}
