@@ -33,9 +33,9 @@ ${
       "ChecksWarning":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "Intention": {
-    ${i % 2 ? `
-        "Action": "${fake.helpers.randomize(['allow', 'deny])}"
-     ` : ``}
+      ${i % 2 ? `
+        "Action": "${fake.helpers.randomize(['allow', 'deny'])}",
+      ` : ``}
         "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
       }
     }
@@ -71,9 +71,10 @@ ${
       "ChecksWarning":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "Intention": {
-        "Allowed": ${fake.random.boolean()},
-        "HasL7Policies": ${fake.random.boolean()},
-        "Source": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
+      ${i % 2 ? `
+        "Action": "${fake.helpers.randomize(['allow', 'deny'])}",
+      ` : ``}
+        "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
       }
     }
       `)}
