@@ -1,22 +1,37 @@
 ${
   [1].map(() => {
     const dc = location.search.dc;
-    const serviceCount = env(
-      'CONSUL_SERVICE_COUNT',
-      Math.floor(
-        (
-          Math.random() * env('CONSUL_SERVICE_MAX', 10)
-        ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
-      )
-    );
+
+    // NOTE!!! The logic below to pick the upstream/downstream service
+    // names must exactly match the logic in internal/ui/metrics-proxy/.../query
+    // If you change this, change it there too!
+
+    // Pick a number of down/upstreams to return based on the cookie variable.
+    // If you change anything about this variable or it's default, you'll need
+    // to change the topology endpoint to match.
+    var numUp = env("CONSUL_UPSTREAM_COUNT", 3);
+    var numDown = env("CONSUL_DOWNSTREAM_COUNT", 5);
+
+    var genFakeServiceNames = function(num) {
+      // Seed faker by the number of results we want to make it deterministic
+      // here and in other correlated endpoints.
+      fake.seed(num);
+      var serviceNames = [];
+      for (var i = 0; i < num; i++) {
+        serviceNames.push(`service-${fake.random.number({min:0, max:99})}`)
+      }
+      return serviceNames
+    };
+
+    var upstreams = genFakeServiceNames(numUp);
+    var downstreams = genFakeServiceNames(numDown);
+
     return `
 {
   "Upstreams":
   [
     ${
-      range(
-        serviceCount
-      ).map((item, i) => `
+      upstreams.map((item, i) => `
     {
       "Name": "service-${i}",
   ${i % 2 ? `
@@ -38,23 +53,13 @@ ${
         "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
       }
     }
-      `)}
   ],
   "Downstreams":
   [
     ${
-      range(
-        env(
-          'CONSUL_SERVICE_COUNT',
-          Math.floor(
-            (
-              Math.random() * env('CONSUL_SERVICE_MAX', 10)
-            ) + parseInt(env('CONSUL_SERVICE_MIN', 1))
-          )
-        )
-      ).map((item, i) => `
+      downstreams.map((item, i) => `
     {
-      "Name": "service-${i}",
+      "Name": "${item}",
   ${i % 2 ? `
       "Datacenter": "${dc}",
   ` : `
@@ -75,7 +80,7 @@ ${
         "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
       }
     }
-      `)}
+    `)}
   ]
 }`
 

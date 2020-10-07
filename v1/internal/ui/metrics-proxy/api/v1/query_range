@@ -31,8 +31,8 @@
                 range = 1000; // up to 1000 rps
               } else if (q.match('envoy_tcp_downstream_cx_rx_bytes_total')) {
                 type = "rx";
-                range = 10e8; // up to 100 mbps
-              } else if (q.match('envoy_tcp_downstream_cx_rx_bytes_total')) {
+                range = 0.5 * 10e9; // up to 500 mbps
+              } else if (q.match('envoy_tcp_downstream_cx_tx_bytes_total')) {
                 type = "tx";
                 range = 10e9; // up to 1 gbps
               }
