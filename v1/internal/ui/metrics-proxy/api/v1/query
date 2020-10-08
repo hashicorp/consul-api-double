@@ -76,8 +76,9 @@
               break;
           }
 
-          // little helper to get a deterministic number from the targe service
-          // name string.
+          // little helper to get a deterministic number from the target service
+          // name string. NOTE: this should be the same as in service-topology
+          // endpoint so metrics match what is requested.
           var hashStr = function(s) {
             for(var i = 0, h = 0xdeadbeef; i < s.length; i++)
                 h = Math.imul(h ^ s.charCodeAt(i), 2654435761);

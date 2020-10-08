@@ -26,12 +26,38 @@ ${
     var upstreams = genFakeServiceNames(numUp);
     var downstreams = genFakeServiceNames(numDown);
 
+    const targetService = location.pathname.toString().replace('/v1/internal/ui/service-topology/', '')
+
+    // little helper to get a deterministic number from the target service
+    // name string. NOTE: this should be the same as in metrics-proxy/.../query
+    // endpoint so metrics match what is requested.
+    var hashStr = function(s) {
+      for(var i = 0, h = 0xdeadbeef; i < s.length; i++)
+          h = Math.imul(h ^ s.charCodeAt(i), 2654435761);
+      return (h ^ h >>> 16) >>> 0;
+    };
+
+    var serviceProto = "tcp"
+    // Randomly pick the serviceProtocol which will affect which types of
+    // stats we return for downstream clusters. But we need it to be
+    // deterministic for a given service name so that all the downstream
+    // stats are consistently typed.
+    fake.seed(hashStr(targetService))
+    if (fake.random.number(1) > 0.5) {
+      serviceProto = "http";
+    }
+
     return `
 {
+  "Protocol": "${serviceProto}",
   "Upstreams":
   [
     ${
-      upstreams.map((item, i) => `
+      upstreams.map((item, i) => {
+        let hasPerms = fake.random.boolean();
+        // if hasPerms is true allowed is always false as some restrictions apply
+        let allowed = hasPerms ? false : fake.random.boolean();
+        return `
     {
       "Name": "service-${i}",
   ${i % 2 ? `
@@ -48,16 +74,21 @@ ${
       "ChecksWarning":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "Intention": {
-        "Allowed": ${fake.random.boolean()},
-        "HasPermissions": ${fake.random.boolean()},
+        "Allowed": ${allowed},
+        "HasPermissions": ${hasPerms},
         "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
       }
     }
+    `})}
   ],
   "Downstreams":
   [
     ${
-      downstreams.map((item, i) => `
+      downstreams.map((item, i) => {
+        let hasPerms = fake.random.boolean();
+        // if hasPerms is true allowed is always false as some restrictions apply
+        let allowed = hasPerms ? false : fake.random.boolean();
+        return `
     {
       "Name": "${item}",
   ${i % 2 ? `
@@ -75,12 +106,12 @@ ${
       "ChecksWarning":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "Intention": {
-        "Allowed": ${fake.random.boolean()},
-        "HasPermissions": ${fake.random.boolean()},
+        "Allowed": ${allowed},
+        "HasPermissions": ${hasPerms},
         "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
       }
     }
-    `)}
+    `})}
   ]
 }`
 
