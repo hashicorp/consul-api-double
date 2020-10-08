@@ -59,7 +59,7 @@ ${
         let allowed = hasPerms ? false : fake.random.boolean();
         return `
     {
-      "Name": "service-${i}",
+      "Name": "${item}",
   ${i % 2 ? `
       "Datacenter": "${dc}",
   ` : `
