@@ -71,7 +71,7 @@ ${
       "ChecksCritical":${fake.random.number({min: 0, max: env('CONSUL_CHECK_COUNT', fake.random.number(10))})},
       "Intention": {
         "Allowed": ${fake.random.boolean()},
-        "HasL7Permissions": ${fake.random.boolean()},
+        "HasPermissions": ${fake.random.boolean()},
         "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
       }
     }
