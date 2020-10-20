@@ -137,10 +137,10 @@
                 range = 100;
               } else if (q.match('cx_rx_bytes')) {
                 // inbound data rate tends to be lower than outbound
-                range = 0.5 * 10e9;
+                range = 0.5 * 1e9;
               } else if (q.match('cx_tx_bytes')) {
                 // inbound data rate
-                range = 10e9;
+                range = 1e9;
               }
               // no route/connect faile are OK with default 0-100
               break;
