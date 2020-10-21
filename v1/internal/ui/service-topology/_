@@ -60,11 +60,7 @@ ${
         return `
     {
       "Name": "${item}",
-  ${i % 2 ? `
       "Datacenter": "${dc}",
-  ` : `
-      "Datacenter": "${fake.address.countryCode().toLowerCase()}_${ i % 2 ? "west" : "east"}-${i}",
-  `}
   ${i === 1 ? `
         "Namespace": "default",
   ` : `
@@ -91,12 +87,7 @@ ${
         return `
     {
       "Name": "${item}",
-  ${i % 2 ? `
       "Datacenter": "${dc}",
-  ` : `
-      "Datacenter": "${fake.address.countryCode().toLowerCase()}_${ i % 2 ? "west" : "east"}-${i}",
-  `}
-
   ${i === 1 ? `
         "Namespace": "default",
   ` : `
