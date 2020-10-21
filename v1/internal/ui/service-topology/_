@@ -50,6 +50,7 @@ ${
     return `
 {
   "Protocol": "${serviceProto}",
+  "FilteredByACLs": ${fake.random.boolean()},
   "Upstreams":
   [
     ${
