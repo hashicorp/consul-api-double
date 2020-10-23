@@ -73,7 +73,8 @@ ${
       "Intention": {
         "Allowed": ${allowed},
         "HasPermissions": ${hasPerms},
-        "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
+        "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}",
+        "HasExact": ${fake.random.boolean()}
       }
     }
     `})}
@@ -100,7 +101,8 @@ ${
       "Intention": {
         "Allowed": ${allowed},
         "HasPermissions": ${hasPerms},
-        "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}"
+        "ExternalSource": "${fake.helpers.randomize(['nomad', 'kubernetes', ''])}",
+        "HasExact": ${fake.random.boolean()}
       }
     }
     `})}
