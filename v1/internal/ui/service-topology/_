@@ -1,7 +1,6 @@
 ${
   [1].map(() => {
     const dc = location.search.dc;
-    const kind = location.search.kind;
 
     // NOTE!!! The logic below to pick the upstream/downstream service
     // names must exactly match the logic in internal/ui/metrics-proxy/.../query
@@ -50,11 +49,7 @@ ${
 
     return `
 {
-${kind ? `
   "Protocol": "${serviceProto}",
-` : `
-  "Protocol": "",
-`}
   "FilteredByACLs": ${fake.random.boolean()},
   "Upstreams":
   [
